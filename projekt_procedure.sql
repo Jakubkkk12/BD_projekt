@@ -2,6 +2,10 @@ CREATE OR REPLACE PROCEDURE add_country(
     p_country_name VARCHAR(30)
 ) AS $$
 BEGIN
+    IF p_country_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_country_name) > 30 THEN
 		RAISE EXCEPTION 'Country name exceeded 30 characters';
 	END IF;
@@ -32,6 +36,10 @@ CREATE OR REPLACE PROCEDURE add_region(
 	p_country_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_region_name IS NULL OR p_country_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_region_name) > 30 THEN
 		RAISE EXCEPTION 'Region name exceeded 30 characters';
 	END IF;
@@ -71,6 +79,10 @@ CREATE OR REPLACE PROCEDURE add_settlement(
 	p_region_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_settlement_name IS NULL OR p_region_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_settlement_name) > 30 THEN
 		RAISE EXCEPTION 'Settlement name exceeded 30 characters';
 	END IF;
@@ -112,6 +124,13 @@ CREATE OR REPLACE PROCEDURE add_location(
     p_settlement_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_location_street IS NULL OR 
+    p_location_building_number IS NULL OR 
+    p_location_postal_code IS NULL OR 
+    p_settlement_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_location_street) > 30 THEN
 		RAISE EXCEPTION 'Street name exceeded 30 characters';
 	END IF;
@@ -154,6 +173,10 @@ CREATE OR REPLACE PROCEDURE add_gender(
     p_gender_name VARCHAR(30)
 ) AS $$
 BEGIN
+    IF p_gender_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_gender_name) > 25 THEN
 		RAISE EXCEPTION 'Gender name exceeded 25 characters';
 	END IF;
@@ -179,10 +202,47 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE PROCEDURE add_role(
+    p_role_name VARCHAR(20)
+) AS $$
+BEGIN
+    IF p_role_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    IF LENGTH(p_gender_name) > 20 THEN
+        RAISE EXCEPTION 'Gender name exceeded 20 characters';
+    END IF;
+    
+    PERFORM 1
+    FROM Roles
+    WHERE
+        name = p_role_name;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Role already exist';
+    END IF;
+    
+    BEGIN
+        INSERT INTO Roles (name)
+        VALUES (p_role_name);
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 CREATE OR REPLACE PROCEDURE add_type_of_voice(
     p_type_of_voice_name VARCHAR(10)
 ) AS $$
 BEGIN
+    IF p_type_of_voice_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_type_of_voice_name) > 10 THEN
 		RAISE EXCEPTION 'Type of voice name exceeded 10 characters';
 	END IF;
@@ -213,6 +273,10 @@ CREATE OR REPLACE PROCEDURE add_type_of_instrument(
     p_type_of_instrument_name VARCHAR(20)
 ) AS $$
 BEGIN
+    IF p_type_of_instrument_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_type_of_instrument_name) > 20 THEN
 		RAISE EXCEPTION 'Type of instrument name exceeded 20 characters';
 	END IF;
@@ -242,6 +306,10 @@ CREATE OR REPLACE PROCEDURE add_dance(
     p_dance_name VARCHAR(20)
 ) AS $$
 BEGIN
+    IF p_dance_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_dance_name) > 20 THEN
 		RAISE EXCEPTION 'Dance name exceeded 20 characters';
 	END IF;
@@ -271,6 +339,10 @@ CREATE OR REPLACE PROCEDURE add_color(
     p_color_name VARCHAR(25)
 ) AS $$
 BEGIN
+    IF p_color_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_color_name) > 25 THEN
 		RAISE EXCEPTION 'Color name exceeded 25 characters';
 	END IF;
@@ -300,6 +372,10 @@ CREATE OR REPLACE PROCEDURE add_collection(
     p_collection_name VARCHAR(20)
 ) AS $$
 BEGIN
+    IF p_collection_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_collection_name) > 20 THEN
 		RAISE EXCEPTION 'Collection name exceeded 20 characters';
 	END IF;
@@ -329,6 +405,10 @@ CREATE OR REPLACE PROCEDURE add_pattern(
     p_pattern_name VARCHAR(20)
 ) AS $$
 BEGIN
+    IF p_pattern_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_pattern_name) > 20 THEN
 		RAISE EXCEPTION 'Pattern name exceeded 20 characters';
 	END IF;
@@ -354,11 +434,47 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE PROCEDURE add_head_accessory_category(
+    p_head_accessory_category_name VARCHAR(20)
+) AS $$
+BEGIN
+    IF p_head_accessory_category_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    IF LENGTH(p_head_accessory_category_name) > 20 THEN
+        RAISE EXCEPTION 'Head accessory category name exceeded 20 characters';
+    END IF;
+    
+    PERFORM 1
+    FROM Head_accessory_categories
+    WHERE
+        name = p_head_accessory_category_name;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Head accessory category already exist';
+    END IF;
+    
+    BEGIN
+        INSERT INTO Head_accessory_categories (name)
+        VALUES (p_head_accessory_category_name);
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 CREATE OR REPLACE PROCEDURE add_state_of_request(
     p_state_of_request_name VARCHAR(15)
 ) AS $$
 BEGIN
+    IF p_state_of_request_name IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_state_of_request_name) > 15 THEN
 		RAISE EXCEPTION 'State of request name exceeded 15 characters';
 	END IF;
@@ -402,6 +518,25 @@ CREATE OR REPLACE PROCEDURE add_user(
     p_user_shoe_size           FLOAT
 ) AS $$
 BEGIN
+    IF p_user_first_name IS NULL OR 
+    p_user_last_name IS NULL OR 
+    p_user_date_of_birth IS NULL OR 
+    p_user_email IS NULL OR 
+    p_user_phone_number IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_home_location_id IS NULL OR 
+    p_user_height IS NULL OR 
+    p_user_waist_circumference IS NULL OR 
+    p_user_chest_circumference IS NULL OR 
+    p_user_head_circumference IS NULL OR 
+    p_user_neck_circumference IS NULL OR 
+    p_user_leg_length IS NULL OR 
+    p_user_arm_length IS NULL OR 
+    p_user_torso_length IS NULL OR 
+    p_user_shoe_size IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	IF LENGTH(p_user_first_name) > 25 THEN
 		RAISE EXCEPTION 'First name exceeded 25 characters';
 	END IF;
@@ -497,13 +632,19 @@ END;
 $$ LANGUAGE plpgsql;
 
 
---Poprawc w docx
+
 CREATE OR REPLACE PROCEDURE make_user_costumier(
     p_user_id INT,
     p_role_id SMALLINT,
     p_work_location_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_role_id IS NULL OR 
+    p_work_location_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Roles
 	WHERE
@@ -560,6 +701,11 @@ CREATE OR REPLACE PROCEDURE make_user_singer(
     p_role_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_role_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Roles
 	WHERE
@@ -607,6 +753,11 @@ CREATE OR REPLACE PROCEDURE make_user_musician(
     p_role_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_role_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Roles
 	WHERE
@@ -654,6 +805,11 @@ CREATE OR REPLACE PROCEDURE make_user_dancer(
     p_role_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_role_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Roles
 	WHERE
@@ -701,6 +857,11 @@ CREATE OR REPLACE PROCEDURE add_voice_to_singer(
     p_type_of_voice_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_singer_id IS NULL OR 
+    p_type_of_voice_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Types_of_voices
 	WHERE
@@ -748,6 +909,11 @@ CREATE OR REPLACE PROCEDURE add_instrument_to_musician(
     p_type_of_instrument_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_musician_id IS NULL OR 
+    p_type_of_instrument_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Types_of_instruments
 	WHERE
@@ -795,6 +961,11 @@ CREATE OR REPLACE PROCEDURE add_dance_to_dancer(
     p_dance_id SMALLINT
 ) AS $$
 BEGIN
+    IF p_dancer_id IS NULL OR 
+    p_dance_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Dances
 	WHERE
@@ -834,7 +1005,7 @@ BEGIN
     END;
 END;
 $$ LANGUAGE plpgsql;
---end
+
 
 
 CREATE OR REPLACE PROCEDURE add_apron(
@@ -849,6 +1020,16 @@ CREATE OR REPLACE PROCEDURE add_apron(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_apron_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_apron_length IS NULL OR 
+    p_pattern_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -887,100 +1068,6 @@ BEGIN
 
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
---
-    IF p_apron_length <= 0 THEN
-        RAISE EXCEPTION 'Length must be greater than 0';
-    END IF;
-
-    IF LENGTH(p_apron_name) > 30 THEN
-        RAISE EXCEPTION 'Apron name exceeded 30 characters';
-    END IF;
-
-    PERFORM 1
-	FROM Costumes_items
-	WHERE
-		name = p_apron_name;
-
-	IF FOUND THEN
-		RAISE EXCEPTION 'Apron with name % already exist', p_apron_name;
-	END IF;
-
-	BEGIN
-        INSERT INTO Costumes_items (name, collection_id, gender_id, color_id, location_id)
-        VALUES (p_apron_name, p_collection_id, p_gender_id, p_color_id, p_location_id) RETURNING id INTO i_id;
-
-		INSERT INTO Aprons (costume_item_id, length, pattern_id)
-		VALUES (i_id, p_apron_length, p_pattern_id);
-        COMMIT;
-	EXCEPTION
-		WHEN OTHERS THEN
-			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
-    END;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE OR REPLACE PROCEDURE add_apron(
-    p_apron_name VARCHAR(30),
-    p_collection_id SMALLINT,
-    p_gender_id SMALLINT,
-    p_color_id SMALLINT,
-    p_location_id SMALLINT,
-    p_apron_length SMALLINT,
-    p_pattern_id SMALLINT
-) AS $$
-DECLARE
-    i_id INT;
-BEGIN
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
-    END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
-
-    PERFORM 1
-	FROM Patterns
-	WHERE
-		id = p_pattern_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Pattern with id % does not exist', p_pattern_id;
 	END IF;
 
     IF p_apron_length <= 0 THEN
@@ -1028,6 +1115,15 @@ CREATE OR REPLACE PROCEDURE add_head_accessory(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_head_accessory_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR  
+    p_category_id IS NULL THEN 
+        RAISE EXCEPTION 'Only head circumference parameter can be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1125,6 +1221,19 @@ CREATE OR REPLACE PROCEDURE add_caftan(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_caftan_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_caftan_length IS NULL OR 
+    p_caftan_min_waist_circumference IS NULL OR 
+    p_caftan_max_waist_circumference IS NULL OR 
+    p_caftan_min_chest_circumference IS NULL OR 
+    p_caftan_max_chest_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1230,6 +1339,17 @@ CREATE OR REPLACE PROCEDURE add_petticoat(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_petticoat_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_petticoat_length IS NULL OR 
+    p_petticoat_min_waist_circumference IS NULL OR 
+    p_petticoat_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1326,6 +1446,19 @@ CREATE OR REPLACE PROCEDURE add_corset(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_corset_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_corset_length IS NULL OR 
+    p_corset_min_waist_circumference IS NULL OR 
+    p_corset_max_waist_circumference IS NULL OR 
+    p_corset_min_chest_circumference IS NULL OR 
+    p_corset_max_chest_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1430,6 +1563,17 @@ CREATE OR REPLACE PROCEDURE add_skirt(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_skirt_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_skirt_length IS NULL OR 
+    p_skirt_min_waist_circumference IS NULL OR 
+    p_skirt_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1523,6 +1667,16 @@ CREATE OR REPLACE PROCEDURE add_belt(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_belt_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_belt_min_waist_circumference IS NULL OR 
+    p_belt_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1618,6 +1772,22 @@ CREATE OR REPLACE PROCEDURE add_shirt(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_shirt_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_shirt_length IS NULL OR 
+    p_shirt_arm_length IS NULL OR 
+    p_shirt_min_waist_circumference IS NULL OR 
+    p_shirt_max_waist_circumference IS NULL OR 
+    p_shirt_min_chest_circumference IS NULL OR 
+    p_shirt_max_chest_circumference IS NULL OR 
+    p_shirt_min_neck_circumference IS NULL OR 
+    p_shirt_max_neck_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1734,6 +1904,17 @@ CREATE OR REPLACE PROCEDURE add_pants(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_pants_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_pants_length IS NULL OR 
+    p_pants_min_waist_circumference IS NULL OR 
+    p_pants_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1826,6 +2007,15 @@ CREATE OR REPLACE PROCEDURE add_boots(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_boots_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_boots_shoe_size IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -1911,6 +2101,16 @@ CREATE OR REPLACE PROCEDURE add_neck_accessory(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_neck_accessory_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL OR 
+    p_color_id IS NULL OR 
+    p_location_id IS NULL OR 
+    p_neck_accessory_min_waist_circumference IS NULL OR 
+    p_neck_accessory_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -2005,6 +2205,12 @@ CREATE OR REPLACE PROCEDURE add_costume(
     p_head_accessory_id INTEGER
 ) AS $$
 BEGIN
+    IF p_costume_name IS NULL OR 
+    p_collection_id IS NULL OR 
+    p_gender_id IS NULL THEN 
+        RAISE EXCEPTION 'Costume name, collection id and gender id cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Collections
 	WHERE
@@ -2189,6 +2395,11 @@ CREATE OR REPLACE PROCEDURE add_rental_costume_item_request(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_requester_user_id IS NULL OR 
+    p_costume_item_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
     FROM Users
     WHERE
@@ -2239,6 +2450,11 @@ CREATE OR REPLACE PROCEDURE add_return_costume_item_request(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_requester_user_id IS NULL OR 
+    p_costume_item_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
     FROM Users
     WHERE
@@ -2290,6 +2506,12 @@ CREATE OR REPLACE PROCEDURE add_borrow_costume_item_request(
 DECLARE
     i_id INT;
 BEGIN
+    IF p_requester_user_id IS NULL OR 
+    p_costume_item_id IS NULL OR 
+    p_approver_user_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
     FROM Users
     WHERE
@@ -2354,6 +2576,12 @@ CREATE OR REPLACE PROCEDURE add_notification(
 DECLARE
     r_user_id INTEGER;
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_notification_content IS NULL OR 
+    p_due_to_request_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
     FROM Users
     WHERE
@@ -2402,6 +2630,13 @@ CREATE OR REPLACE PROCEDURE add_rental(
     p_rental_date_of_rental TIMESTAMP
 ) AS $$
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_costume_item_id IS NULL OR 
+    p_done_due_request_id IS NULL OR 
+    p_rental_date_of_rental IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
     FROM Users
     WHERE
@@ -2450,6 +2685,11 @@ CREATE OR REPLACE PROCEDURE update_costume_item_location(
     p_location_id INTEGER
 ) AS $$
 BEGIN
+    IF p_costume_item_id IS NULL OR 
+    p_location_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Costumes_items
 	WHERE
@@ -2495,6 +2735,10 @@ CREATE OR REPLACE PROCEDURE delete_request(
 DECLARE
     r_state_id INT;
 BEGIN
+    IF p_request_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2534,6 +2778,12 @@ DECLARE
     r_costume_item_id INT;
     notification_content TEXT;
 BEGIN
+    IF p_request_id IS NULL OR 
+    p_approver_costumier_id IS NULL OR 
+    p_comment IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2574,6 +2824,7 @@ BEGIN
 		    request_id = p_request_id
         FOR UPDATE;
         
+        -- 2-> ACCEPT
         UPDATE Requests 
         SET 
             state_id = 2 
@@ -2607,6 +2858,12 @@ DECLARE
     r_requester_user_id INT;
     notification_content TEXT := 'Request with id ' || p_request_id || ' has been denied.' || p_comment;
 BEGIN
+    IF p_request_id IS NULL OR 
+    p_approver_costumier_id IS NULL OR 
+    p_comment IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2647,6 +2904,7 @@ BEGIN
 		    request_id = p_request_id
         FOR UPDATE;
         
+        -- 3-> DENY
         UPDATE Requests 
         SET 
             state_id = 3
@@ -2680,6 +2938,12 @@ DECLARE
     r_costume_item_id INT;
     notification_content TEXT;
 BEGIN
+    IF p_request_id IS NULL OR 
+    p_approver_costumier_id IS NULL OR 
+    p_comment IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2720,6 +2984,7 @@ BEGIN
 		    request_id = p_request_id
         FOR UPDATE;
         
+        -- 2-> ACCEPT
         UPDATE Requests 
         SET 
             state_id = 2 
@@ -2753,6 +3018,12 @@ DECLARE
     r_requester_user_id INT;
     notification_content TEXT := 'Request with id ' || p_request_id || ' has been denied.' || p_comment;
 BEGIN
+    IF p_request_id IS NULL OR 
+    p_approver_costumier_id IS NULL OR 
+    p_comment IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2793,6 +3064,7 @@ BEGIN
 		    request_id = p_request_id
         FOR UPDATE;
         
+        -- 3-> DENY
         UPDATE Requests 
         SET 
             state_id = 3
@@ -2824,6 +3096,11 @@ DECLARE
     r_requester_user_id INT;
     notification_content TEXT;
 BEGIN
+    IF p_request_id IS NULL OR 
+    p_comment IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2855,6 +3132,7 @@ BEGIN
 		    request_id = p_request_id
         FOR UPDATE;
         
+        -- 2-> ACCEPT
         UPDATE Requests 
         SET 
             state_id = 2 
@@ -2881,6 +3159,11 @@ DECLARE
     r_requester_user_id INT;
     notification_content TEXT := 'Request with id ' || p_request_id || ' has been denied.' || p_comment;
 BEGIN
+    IF p_request_id IS NULL OR 
+    p_comment IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Requests
 	WHERE
@@ -2912,6 +3195,7 @@ BEGIN
 		    request_id = p_request_id
         FOR UPDATE;
         
+        -- 3-> DENY
         UPDATE Requests 
         SET 
             state_id = 3
@@ -2933,6 +3217,10 @@ CREATE OR REPLACE PROCEDURE mark_notification_as_read(
     p_notification_id INTEGER
 ) AS $$
 BEGIN
+    IF p_notification_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	PERFORM 1
 	FROM Notifications
 	WHERE
@@ -2969,6 +3257,12 @@ CREATE OR REPLACE PROCEDURE rent_costume_item(
     p_done_due_request_id INTEGER
 ) AS $$
 BEGIN
+    IF p_user_id IS NULL OR 
+    p_costume_item_id IS NULL OR 
+    p_done_due_request_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
 	BEGIN
 		CALL add_rental(p_user_id, p_costume_item_id, p_done_due_request_id, date_trunc('minute', NOW()::TIMESTAMP));
 	EXCEPTION
@@ -2984,6 +3278,10 @@ CREATE OR REPLACE PROCEDURE return_costume_item(
     p_rental_id INTEGER
 ) AS $$
 BEGIN
+    IF p_rental_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
     PERFORM 1
 	FROM Rentals
 	WHERE
@@ -3023,6 +3321,13 @@ CREATE OR REPLACE PROCEDURE borrow_costume_item(
 DECLARE
     swap_datetime TIMESTAMP;
 BEGIN
+    IF p_rental_id IS NULL OR 
+    p_new_owner_user_id IS NULL OR 
+    p_costume_item_id IS NULL OR 
+    p_done_due_request_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
     PERFORM 1
 	FROM Rentals
 	WHERE
