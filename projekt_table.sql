@@ -1324,7 +1324,7 @@ ALTER TABLE States_of_requests
 ALTER TABLE States_of_requests 
     ADD CONSTRAINT States_of_requests_UN UNIQUE ( name ) ;
 
-INSERT INTO states_of_requests (name) VALUES ('PENDING');
+INSERT INTO States_of_requests (name) VALUES ('PENDING'), ('ACCEPT'), ('DENY');
 
 CREATE TABLE Requests 
     ( 
