@@ -585,15 +585,15 @@ BEGIN
 		RAISE EXCEPTION 'Torso length must be greater than 0';
     END IF;
 
-    IF p_user_leg_length < p_user_height THEN
+    IF p_user_leg_length >= p_user_height THEN
 		RAISE EXCEPTION 'Leg length cannot be greater than height';
     END IF;
 
-    IF p_user_arm_length < p_user_height THEN
+    IF p_user_arm_length >= p_user_height THEN
 		RAISE EXCEPTION 'Arm length cannot be greater than height';
     END IF;
 
-    IF p_user_torso_length < p_user_height THEN
+    IF p_user_torso_length >= p_user_height THEN
 		RAISE EXCEPTION 'Torso length cannot be greater than height';
     END IF;
 
