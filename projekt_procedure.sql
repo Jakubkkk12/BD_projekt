@@ -6,8 +6,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_country_name) > 30 THEN
-		RAISE EXCEPTION 'Country name exceeded 30 characters';
+	IF LENGTH(p_country_name) > 30 OR LENGTH(p_country_name) < 1 THEN
+		RAISE EXCEPTION 'Country name can have between 1 and 30 characters';
 	END IF;
 	
 	PERFORM 1
@@ -40,12 +40,12 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_region_name) > 30 THEN
-		RAISE EXCEPTION 'Region name exceeded 30 characters';
+	IF LENGTH(p_region_name) > 30 OR LENGTH(p_region_name) < 1 THEN
+		RAISE EXCEPTION 'Region name can have between 1 and 30 characters';
 	END IF;
 
 	PERFORM 1
-	FROM Countris
+	FROM Countries
 	WHERE
 		id = p_country_id;
 
@@ -83,8 +83,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_settlement_name) > 30 THEN
-		RAISE EXCEPTION 'Settlement name exceeded 30 characters';
+	IF LENGTH(p_settlement_name) > 30 OR LENGTH(p_settlement_name) < 1 THEN
+		RAISE EXCEPTION 'Settlement name can have between 1 and 30 characters';
 	END IF;
 
 	PERFORM 1
@@ -131,12 +131,12 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_location_street) > 30 THEN
-		RAISE EXCEPTION 'Street name exceeded 30 characters';
+	IF LENGTH(p_location_street) > 30 OR LENGTH(p_location_street) < 1 THEN
+		RAISE EXCEPTION 'Street name can have between 1 and 30 characters';
 	END IF;
 
-    IF LENGTH(p_location_postal_code) > 10 THEN
-		RAISE EXCEPTION 'Postal code exceeded 10 characters';
+    IF LENGTH(p_location_postal_code) > 10 OR LENGTH(p_location_postal_code) < 1 THEN
+		RAISE EXCEPTION 'Postal code can have between 1 and 10 characters';
 	END IF;
 
 	PERFORM 1
@@ -170,15 +170,15 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE PROCEDURE add_gender(
-    p_gender_name VARCHAR(30)
+    p_gender_name VARCHAR(25)
 ) AS $$
 BEGIN
     IF p_gender_name IS NULL THEN 
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_gender_name) > 25 THEN
-		RAISE EXCEPTION 'Gender name exceeded 25 characters';
+	IF LENGTH(p_gender_name) > 25 OR LENGTH(p_gender_name) < 1 THEN
+		RAISE EXCEPTION 'Gender name can have between 1 and 25 characters';
 	END IF;
 	
 	PERFORM 1
@@ -210,8 +210,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    IF LENGTH(p_gender_name) > 20 THEN
-        RAISE EXCEPTION 'Gender name exceeded 20 characters';
+    IF LENGTH(p_role_name) > 20 OR LENGTH(p_role_name) < 1 THEN
+        RAISE EXCEPTION 'Role name can have between 1 and 20 characters';
     END IF;
     
     PERFORM 1
@@ -243,8 +243,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_type_of_voice_name) > 10 THEN
-		RAISE EXCEPTION 'Type of voice name exceeded 10 characters';
+	IF LENGTH(p_type_of_voice_name) > 10 OR LENGTH(p_type_of_voice_name) < 1 THEN
+		RAISE EXCEPTION 'Type of voice name can have between 1 and 10 characters';
 	END IF;
 	
 	PERFORM 1
@@ -277,8 +277,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_type_of_instrument_name) > 20 THEN
-		RAISE EXCEPTION 'Type of instrument name exceeded 20 characters';
+	IF LENGTH(p_type_of_instrument_name) > 20 OR LENGTH(p_type_of_instrument_name) < 1 THEN
+		RAISE EXCEPTION 'Type of instrument name can have between 1 and 20 characters';
 	END IF;
 	
 	PERFORM 1
@@ -310,8 +310,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_dance_name) > 20 THEN
-		RAISE EXCEPTION 'Dance name exceeded 20 characters';
+	IF LENGTH(p_dance_name) > 20 OR LENGTH(p_dance_name) < 1 THEN
+		RAISE EXCEPTION 'Dance name can have between 1 and 20 characters';
 	END IF;
 	
 	PERFORM 1
@@ -343,8 +343,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_color_name) > 25 THEN
-		RAISE EXCEPTION 'Color name exceeded 25 characters';
+	IF LENGTH(p_color_name) > 25 OR LENGTH(p_color_name) < 1 THEN
+		RAISE EXCEPTION 'Color name can have between 1 and 25 characters';
 	END IF;
 	
 	PERFORM 1
@@ -376,8 +376,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_collection_name) > 20 THEN
-		RAISE EXCEPTION 'Collection name exceeded 20 characters';
+	IF LENGTH(p_collection_name) > 20 OR LENGTH(p_collection_name) < 1 THEN
+		RAISE EXCEPTION 'Collection name can have between 1 and 20 characters';
 	END IF;
 	
 	PERFORM 1
@@ -409,8 +409,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_pattern_name) > 20 THEN
-		RAISE EXCEPTION 'Pattern name exceeded 20 characters';
+	IF LENGTH(p_pattern_name) > 20 OR LENGTH(p_pattern_name) < 1 THEN
+		RAISE EXCEPTION 'Pattern name can have between 1 and 20characters';
 	END IF;
 	
 	PERFORM 1
@@ -442,8 +442,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    IF LENGTH(p_head_accessory_category_name) > 20 THEN
-        RAISE EXCEPTION 'Head accessory category name exceeded 20 characters';
+    IF LENGTH(p_head_accessory_category_name) > 20 OR LENGTH(p_head_accessory_category_name) > 20 THEN
+        RAISE EXCEPTION 'Head accessory category name can have between 1 and 20 characters';
     END IF;
     
     PERFORM 1
@@ -475,8 +475,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_state_of_request_name) > 15 THEN
-		RAISE EXCEPTION 'State of request name exceeded 15 characters';
+	IF LENGTH(p_state_of_request_name) > 15 OR LENGTH(p_state_of_request_name) < 1 THEN
+		RAISE EXCEPTION 'State of request name can have between 1 and 15 characters';
 	END IF;
 	
 	PERFORM 1
@@ -537,16 +537,16 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	IF LENGTH(p_user_first_name) > 25 THEN
-		RAISE EXCEPTION 'First name exceeded 25 characters';
+	IF LENGTH(p_user_first_name) > 25 OR LENGTH(p_user_first_name) < 1 THEN
+		RAISE EXCEPTION 'First name can have between 1 and 25 characters';
 	END IF;
 	
-    IF LENGTH(p_user_last_name) > 30 THEN
-		RAISE EXCEPTION 'Last name exceeded 30 characters';
+    IF LENGTH(p_user_last_name) > 30 OR LENGTH(p_user_last_name) < 1 THEN
+		RAISE EXCEPTION 'Last name can have between 1 and 30 characters';
 	END IF;
 	
     IF LENGTH(p_user_email) > 50 OR p_user_email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
-		RAISE EXCEPTION 'Wrong email format, max characters - 50';
+		RAISE EXCEPTION 'Wrong email format. min characters - 5, max characters - 50';
 	END IF;
 	
     IF LENGTH(p_user_phone_number) > 12 OR p_user_phone_number ~* '^\+?[0-9]{7,9}$' THEN
@@ -686,7 +686,7 @@ BEGIN
 
 		INSERT INTO Costumiers (user_id, role_id, work_location_id)
 		VALUES (p_user_id, p_role_id, p_work_location_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -738,7 +738,7 @@ BEGIN
 
 		INSERT INTO Singers (user_id, role_id)
 		VALUES (p_user_id, p_role_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -790,7 +790,7 @@ BEGIN
 
 		INSERT INTO Musicians (user_id, role_id)
 		VALUES (p_user_id, p_role_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -842,7 +842,7 @@ BEGIN
 
 		INSERT INTO Dancers (user_id, role_id)
 		VALUES (p_user_id, p_role_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -894,7 +894,7 @@ BEGIN
 
 		INSERT INTO Singer_voices (singer_id, type_of_voice_id)
 		VALUES (p_singer_id, p_type_of_voice_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -946,7 +946,7 @@ BEGIN
 
 		INSERT INTO Musician_instrument (musician_id, type_of_instrument_id)
 		VALUES (p_musician_id, p_type_of_instrument_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -998,7 +998,7 @@ BEGIN
 
 		INSERT INTO Dancer_dance (dancer_id, dance_id)
 		VALUES (p_dancer_id, p_dance_id);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1074,8 +1074,8 @@ BEGIN
         RAISE EXCEPTION 'Length must be greater than 0';
     END IF;
 
-    IF LENGTH(p_apron_name) > 30 THEN
-        RAISE EXCEPTION 'Apron name exceeded 30 characters';
+    IF LENGTH(p_apron_name) > 30 OR LENGTH(p_apron_name) < 1 THEN
+        RAISE EXCEPTION 'Apron name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1093,7 +1093,6 @@ BEGIN
 
 		INSERT INTO Aprons (costume_item_id, length, pattern_id)
 		VALUES (i_id, p_apron_length, p_pattern_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1177,8 +1176,8 @@ BEGIN
         RAISE EXCEPTION 'Head circumference must be greater than 0';
     END IF;
 
-    IF LENGTH(p_head_accessory_name) > 30 THEN
-        RAISE EXCEPTION 'Head accessory name exceeded 30 characters';
+    IF LENGTH(p_head_accessory_name) > 30 OR LENGTH(p_head_accessory_name) < 1 THEN
+        RAISE EXCEPTION 'Head accessory name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1196,7 +1195,6 @@ BEGIN
 
 		INSERT INTO Head_accessories (costume_item_id, category_id, head_circumference)
 		VALUES (i_id, p_category_id, p_head_accessory_head_circumference);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1282,7 +1280,7 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_caftan_max_waist_circumference >= p_caftan_min_waist_circumference THEN
+    IF p_caftan_max_waist_circumference < p_caftan_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
@@ -1290,12 +1288,12 @@ BEGIN
         RAISE EXCEPTION 'Min chest circumference must be greater than 0';
     END IF;
 
-    IF p_caftan_max_chest_circumference >= p_caftan_min_chest_circumference THEN
+    IF p_caftan_max_chest_circumference < p_caftan_min_chest_circumference THEN
         RAISE EXCEPTION 'Max chest circumference must be greater or equal than min chest circumference';
     END IF;
 
-    IF LENGTH(p_caftan_name) > 30 THEN
-        RAISE EXCEPTION 'Caftan name exceeded 30 characters';
+    IF LENGTH(p_caftan_name) > 30 OR LENGTH(p_caftan_name) < 1 THEN
+        RAISE EXCEPTION 'Caftan name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1315,7 +1313,6 @@ BEGIN
         min_chest_circumference, max_chest_circumference)
 		VALUES (i_id, p_caftan_length, p_caftan_min_waist_circumference, p_caftan_max_waist_circumference,
         p_caftan_min_chest_circumference, p_caftan_max_chest_circumference);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1398,12 +1395,12 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_petticoat_max_waist_circumference >= p_petticoat_min_waist_circumference THEN
+    IF p_petticoat_max_waist_circumference < p_petticoat_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
-    IF LENGTH(p_petticoat_name) > 30 THEN
-        RAISE EXCEPTION 'Petticoat name exceeded 30 characters';
+    IF LENGTH(p_petticoat_name) > 30 OR LENGTH(p_petticoat_name) < 1 THEN
+        RAISE EXCEPTION 'Petticoat name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1421,7 +1418,6 @@ BEGIN
 
 		INSERT INTO Petticoats (costume_item_id, length, min_waist_circumference, max_waist_circumference)
 		VALUES (i_id, p_petticoat_length, p_petticoat_min_waist_circumference, p_petticoat_max_waist_circumference);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1507,7 +1503,7 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_corset_max_waist_circumference >= p_corset_min_waist_circumference THEN
+    IF p_corset_max_waist_circumference < p_corset_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
@@ -1515,12 +1511,12 @@ BEGIN
         RAISE EXCEPTION 'Min chest circumference must be greater than 0';
     END IF;
 
-    IF p_corset_max_chest_circumference >= p_corset_min_chest_circumference THEN
+    IF p_corset_max_chest_circumference < p_corset_min_chest_circumference THEN
         RAISE EXCEPTION 'Max chest circumference must be greater or equal than min chest circumference';
     END IF;
 
-    IF LENGTH(p_corset_name) > 30 THEN
-        RAISE EXCEPTION 'Corset name exceeded 30 characters';
+    IF LENGTH(p_corset_name) > 30 OR LENGTH(p_corset_name) < 1 THEN
+        RAISE EXCEPTION 'Corset name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1540,7 +1536,6 @@ BEGIN
         min_chest_circumference, max_chest_circumference)
 		VALUES (i_id, p_corset_length, p_corset_min_waist_circumference, p_corset_max_waist_circumference,
         p_corset_min_chest_circumference, p_corset_max_chest_circumference);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1622,12 +1617,12 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_skirt_max_waist_circumference >= p_skirt_min_waist_circumference THEN
+    IF p_skirt_max_waist_circumference < p_skirt_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
-    IF LENGTH(p_skirt_name) > 30 THEN
-        RAISE EXCEPTION 'Skirt name exceeded 30 characters';
+    IF LENGTH(p_skirt_name) > 30 OR LENGTH(p_skirt_name) < 1 THEN
+        RAISE EXCEPTION 'Skirt name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1645,7 +1640,6 @@ BEGIN
 
 		INSERT INTO Skirts (costume_item_id, length, min_waist_circumference, max_waist_circumference)
 		VALUES (i_id, p_skirt_length, p_skirt_min_waist_circumference, p_skirt_max_waist_circumference);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1721,12 +1715,12 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_belt_max_waist_circumference >= p_belt_min_waist_circumference THEN
+    IF p_belt_max_waist_circumference < p_belt_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
-    IF LENGTH(p_belt_name) > 30 THEN
-        RAISE EXCEPTION 'Belt name exceeded 30 characters';
+    IF LENGTH(p_belt_name) > 30 OR LENGTH(p_belt_name) < 1 THEN
+        RAISE EXCEPTION 'Belt name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1744,7 +1738,7 @@ BEGIN
 
 		INSERT INTO Belts (costume_item_id, min_waist_circumference, max_waist_circumference)
 		VALUES (i_id, p_belt_min_waist_circumference, p_belt_max_waist_circumference);
-        COMMIT;
+
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1840,7 +1834,7 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_shirt_max_waist_circumference >= p_shirt_min_waist_circumference THEN
+    IF p_shirt_max_waist_circumference < p_shirt_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
@@ -1848,7 +1842,7 @@ BEGIN
         RAISE EXCEPTION 'Min chest circumference must be greater than 0';
     END IF;
 
-    IF p_shirt_max_chest_circumference >= p_shirt_min_chest_circumference THEN
+    IF p_shirt_max_chest_circumference < p_shirt_min_chest_circumference THEN
         RAISE EXCEPTION 'Max chest circumference must be greater or equal than min chest circumference';
     END IF;
 
@@ -1856,12 +1850,12 @@ BEGIN
         RAISE EXCEPTION 'Min neck circumference must be greater than 0';
     END IF;
 
-    IF p_shirt_max_neck_circumference >= p_shirt_min_neck_circumference THEN
+    IF p_shirt_max_neck_circumference < p_shirt_min_neck_circumference THEN
         RAISE EXCEPTION 'Max neck circumference must be greater or equal than min neck circumference';
     END IF;
 
-    IF LENGTH(p_shirt_name) > 30 THEN
-        RAISE EXCEPTION 'Shirt name exceeded 30 characters';
+    IF LENGTH(p_shirt_name) > 30 OR LENGTH(p_shirt_name) < 1 THEN
+        RAISE EXCEPTION 'Shirt name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1881,7 +1875,6 @@ BEGIN
         min_chest_circumference, max_chest_circumference, min_neck_circumference, max_neck_circumference)
 		VALUES (i_id, p_shirt_length, p_shirt_min_waist_circumference, p_shirt_max_waist_circumference,
         p_shirt_min_chest_circumference, p_shirt_max_chest_circumference, p_shirt_min_neck_circumference, p_shirt_max_neck_circumference);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -1963,12 +1956,12 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_pants_max_waist_circumference >= p_pants_min_waist_circumference THEN
+    IF p_pants_max_waist_circumference < p_pants_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
-    IF LENGTH(p_pants_name) > 30 THEN
-        RAISE EXCEPTION 'Pants name exceeded 30 characters';
+    IF LENGTH(p_pants_name) > 30 OR LENGTH(p_pants_name) < 1 THEN
+        RAISE EXCEPTION 'Pants name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -1986,7 +1979,7 @@ BEGIN
 
 		INSERT INTO Pants (costume_item_id, length, min_waist_circumference, max_waist_circumference)
 		VALUES (i_id, p_pants_length, p_pants_min_waist_circumference, p_pants_max_waist_circumference);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -2060,8 +2053,8 @@ BEGIN
         RAISE EXCEPTION 'Shoe size must be greater than 0';
     END IF;
 
-    IF LENGTH(p_boots_name) > 30 THEN
-        RAISE EXCEPTION 'Boots name exceeded 30 characters';
+    IF LENGTH(p_boots_name) > 30 OR LENGTH(p_boots_name) < 1 THEN
+        RAISE EXCEPTION 'Boots name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -2079,7 +2072,6 @@ BEGIN
 
 		INSERT INTO Boots (costume_item_id, shoe_size)
 		VALUES (i_id, p_boots_shoe_size);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -2155,12 +2147,12 @@ BEGIN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
     END IF;
 
-    IF p_neck_accessory_max_waist_circumference >= p_neck_accessory_min_waist_circumference THEN
+    IF p_neck_accessory_max_waist_circumference < p_neck_accessory_min_waist_circumference THEN
         RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
     END IF;
 
-    IF LENGTH(p_neck_accessory_name) > 30 THEN
-        RAISE EXCEPTION 'Neck accessory name exceeded 30 characters';
+    IF LENGTH(p_neck_accessory_name) > 30 OR LENGTH(p_neck_accessory_name) < 1 THEN
+        RAISE EXCEPTION 'Neck accessory name can have between 1 and 30 characters';
     END IF;
 
     PERFORM 1
@@ -2178,7 +2170,7 @@ BEGIN
 
 		INSERT INTO Neck_accessories (costume_item_id, min_waist_circumference, max_waist_circumference)
 		VALUES (i_id, p_neck_accessory_min_waist_circumference, p_neck_accessory_max_waist_circumference);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -2433,7 +2425,6 @@ BEGIN
 
 		INSERT INTO Rental_costume_item_requests (request_id, costume_item_id, approver_costumier_id)
 		VALUES (i_id, p_costume_item_id, NULL);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -2488,7 +2479,7 @@ BEGIN
 
 		INSERT INTO Return_costume_item_requests (request_id, costume_item_id, approver_costumier_id)
 		VALUES (i_id, p_costume_item_id, NULL);
-        COMMIT;
+        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -2558,7 +2549,6 @@ BEGIN
 
 		INSERT INTO Borrow_costume_item_requests (request_id, costume_item_id, approver_user_id)
 		VALUES (i_id, p_costume_item_id, p_approver_user_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
@@ -2610,7 +2600,11 @@ BEGIN
             RAISE EXCEPTION 'User id and requester user id from request with % are not the same', p_due_to_request_id;
         END IF;
     END IF;
-    
+
+    IF LENGTH(p_notification_content) < 1 THEN
+        RAISE EXCEPTION 'Notification must be at least 1 character';
+    END IF;
+
 	BEGIN
 		INSERT INTO Notifications (user_id, content, datetime, due_to_request_id)
         VALUES (p_user_id, p_notification_content, NOW(), p_due_to_request_id);
@@ -2811,6 +2805,10 @@ BEGIN
         RAISE EXCEPTION 'Costumier with id % does not exist', p_approver_costumier_id;
 	END IF;
 
+    IF LENGTH(p_comment) < 1 THEN
+        RAISE EXCEPTION 'Comment must be at least 1 character';
+    END IF;
+
 	BEGIN
         SELECT requester_user_id INTO r_requester_user_id
 	    FROM Requests
@@ -2839,7 +2837,6 @@ BEGIN
 
         notification_content := 'Request with id ' || p_request_id || ' has been accepted. You can rent costume item with id ' || r_costume_item_id || '. ' || p_comment;
         CALL add_notification(r_requester_user_id, notification_content, p_request_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
@@ -2891,6 +2888,10 @@ BEGIN
         RAISE EXCEPTION 'Costumier with id % does not exist', p_approver_costumier_id;
 	END IF;
 
+    IF LENGTH(p_comment) < 1 THEN
+        RAISE EXCEPTION 'Comment must be at least 1 character';
+    END IF;
+
 	BEGIN
         SELECT requester_user_id INTO r_requester_user_id
 	    FROM Requests
@@ -2918,7 +2919,6 @@ BEGIN
 		    request_id = p_request_id;
 
         CALL add_notification(r_requester_user_id, notification_content, p_request_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
@@ -2971,6 +2971,10 @@ BEGIN
         RAISE EXCEPTION 'Costumier with id % does not exist', p_approver_costumier_id;
 	END IF;
 
+    IF LENGTH(p_comment) < 1 THEN
+        RAISE EXCEPTION 'Comment must be at least 1 character';
+    END IF;
+
 	BEGIN
         SELECT requester_user_id INTO r_requester_user_id
 	    FROM Requests
@@ -2999,7 +3003,6 @@ BEGIN
 
         notification_content := 'Request with id ' || p_request_id || ' has been accepted. You can return costume item with id ' || r_costume_item_id || '. ' || p_comment;
         CALL add_notification(r_requester_user_id, notification_content, p_request_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
@@ -3051,6 +3054,10 @@ BEGIN
         RAISE EXCEPTION 'Costumier with id % does not exist', p_approver_costumier_id;
 	END IF;
 
+    IF LENGTH(p_comment) < 1 THEN
+        RAISE EXCEPTION 'Comment must be at least 1 character';
+    END IF;
+
 	BEGIN
         SELECT requester_user_id INTO r_requester_user_id
 	    FROM Requests
@@ -3078,7 +3085,6 @@ BEGIN
 		    request_id = p_request_id;
 
         CALL add_notification(r_requester_user_id, notification_content, p_request_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
@@ -3119,6 +3125,10 @@ BEGIN
         RAISE EXCEPTION 'Request with id % is not borrow_costume_item_request', p_request_id;
 	END IF;
 
+    IF LENGTH(p_comment) < 1 THEN
+        RAISE EXCEPTION 'Comment must be at least 1 character';
+    END IF;
+
 	BEGIN
         SELECT requester_user_id INTO r_requester_user_id
 	    FROM Requests
@@ -3141,7 +3151,6 @@ BEGIN
 
         notification_content := 'Request with id ' || p_request_id || ' has been accepted. ' || p_comment;
         CALL add_notification(r_requester_user_id, notification_content, p_request_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
@@ -3182,6 +3191,10 @@ BEGIN
         RAISE EXCEPTION 'Request with id % is not borrow_costume_item_request', p_request_id;
 	END IF;
 
+    IF LENGTH(p_comment) < 1 THEN
+        RAISE EXCEPTION 'Comment must be at least 1 character';
+    END IF;
+
 	BEGIN
         SELECT requester_user_id INTO r_requester_user_id
 	    FROM Requests
@@ -3203,7 +3216,6 @@ BEGIN
 		    id = p_request_id;
 
         CALL add_notification(r_requester_user_id, notification_content, p_request_id);
-        COMMIT;
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
