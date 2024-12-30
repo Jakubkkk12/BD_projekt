@@ -163,13 +163,13 @@ ALTER TABLE Users
     ADD CONSTRAINT chk_neck_circumference_value CHECK (neck_circumference > 0);
 
 ALTER TABLE Users 
-    ADD CONSTRAINT chk_leg_length_value CHECK (leg_length > 0);
+    ADD CONSTRAINT chk_leg_length_value CHECK (leg_length > 0 AND leg_length < height);
 
 ALTER TABLE Users 
-    ADD CONSTRAINT chk_arm_length_value CHECK (arm_length > 0);
+    ADD CONSTRAINT chk_arm_length_value CHECK (arm_length > 0 AND arm_length < height);
 
 ALTER TABLE Users 
-    ADD CONSTRAINT chk_torso_length_value CHECK (torso_length > 0);
+    ADD CONSTRAINT chk_torso_length_value CHECK (torso_length > 0 AND torso_length < height);
 
 ALTER TABLE Users 
     ADD CONSTRAINT chk_shoe_size_value CHECK (shoe_size > 0);
