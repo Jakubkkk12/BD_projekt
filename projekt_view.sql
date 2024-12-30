@@ -25,7 +25,7 @@ ASC
 ;
 
 
-CREATE OR REPLACE VIEW user_function_counts ( user_function, number_of_users_with_this_function ) AS
+CREATE OR REPLACE VIEW User_function_counts ( user_function, number_of_users_with_this_function ) AS
 SELECT 'Costumiers' AS "function", COUNT(*) AS "number_of_users_with_this_function"
 FROM Costumiers
 UNION
@@ -310,7 +310,7 @@ ASC)
 ;
 
 
-CREATE OR REPLACE VIEW Costume_item_count_by_class ( "costume_item_class", "number_of_items") AS
+CREATE OR REPLACE VIEW Costume_item_count_by_class ( costume_item_class, number_of_items) AS
 (SELECT 'apron' AS "costume_item_class", COUNT(*) AS "number_of_items"
 FROM Aprons)
 UNION
@@ -680,7 +680,27 @@ ASC
 
 
 
-
+CREATE OR REPLACE VIEW Current_rentals_count_by_user_function ( costume_item_class, number_of_rent_items ) AS 
+SELECT *  
+FROM ((SELECT 'costumier' AS "user_function", COUNT(*) AS "number_of_items" 
+FROM Rentals 
+WHERE date_of_return IS NULL AND user_id IN (SELECT user_id FROM Costumiers)) 
+UNION 
+(SELECT 'singer' AS "user_function", COUNT(*) AS "number_of_items" 
+FROM Rentals 
+WHERE date_of_return IS NULL AND user_id IN (SELECT user_id FROM Singers)) 
+UNION 
+(SELECT 'musician' AS "user_function", COUNT(*) AS "number_of_items" 
+FROM Rentals 
+WHERE date_of_return IS NULL AND user_id IN (SELECT user_id FROM Musicians)) 
+UNION 
+(SELECT 'dancer' AS "user_function", COUNT(*) AS "number_of_items" 
+FROM Rentals 
+WHERE date_of_return IS NULL AND user_id IN (SELECT user_id FROM Dancers))) t 
+ORDER BY  
+	t.user_function 
+ASC 
+; 
 
 
 
