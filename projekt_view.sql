@@ -592,8 +592,8 @@ INNER JOIN Costumes_items h
 ;
 
 
-CREATE OR REPLACE VIEW Not_read_notifications ( id, content, datetime, due_to_request_id ) AS
-SELECT id, content, datetime, due_to_request_id
+CREATE OR REPLACE VIEW Not_read_notifications ( id, user_id, content, datetime, due_to_request_id ) AS
+SELECT id, user_id, content, datetime, due_to_request_id
 FROM Notifications
 WHERE marked_as_read = 'F' 
 ;
