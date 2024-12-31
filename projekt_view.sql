@@ -628,6 +628,19 @@ INNER JOIN States_of_requests s
 	ON r.state_id=s.id
 ;
 
+
+CREATE OR REPLACE VIEW Detaild_costume_item_requests ( id, datetime, type, requester_user_id, state, costume_item_id, approver_id ) AS
+(SELECT d.id, d.datetime, 'RENTAL' AS "type", d.requester_user_id, d.state, d.costume_item_id, d.approver_costumier_id
+FROM Detaild_rental_costume_item_requests d)
+UNION
+(SELECT d.id, d.datetime, 'RETURN' AS "type", d.requester_user_id, d.state, d.costume_item_id, d.approver_costumier_id
+FROM Detaild_return_costume_item_requests d)
+UNION
+(SELECT d.id, d.datetime, 'BORROW' AS "type", d.requester_user_id, d.state, d.costume_item_id, d.approver_user_id
+FROM Detaild_borrow_costume_item_requests d)
+;
+
+
 CREATE OR REPLACE VIEW Current_rentals_count_by_costume_item_class ( costume_item_class, number_of_rent_items ) AS
 SELECT * 
 FROM ((SELECT 'apron' AS "costume_item_class", COUNT(*) AS "number_of_rent_items"
