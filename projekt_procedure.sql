@@ -2688,7 +2688,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE PROCEDURE update_costume_item_location(
     p_costume_item_id INTEGER,
-    p_location_id INTEGER
+    p_location_id SMALLINT
 ) AS $$
 BEGIN
     IF p_costume_item_id IS NULL OR 
@@ -3299,10 +3299,14 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE PROCEDURE return_costume_item(
-    p_rental_id INTEGER
+    p_rental_id INTEGER,
+    p_location_id SMALLINT
 ) AS $$
+DECLARE
+    r_costume_item_id INTEGER;
 BEGIN
-    IF p_rental_id IS NULL THEN 
+    IF p_rental_id IS NULL OR
+    p_location_id IS NULL THEN 
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
@@ -3315,8 +3319,17 @@ BEGIN
         RAISE EXCEPTION 'Rental with id % does not exist', p_rental_id;
 	END IF;
 
+    PERFORM 1
+	FROM Locations
+	WHERE
+		id = p_location_id;
+
+	IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+	END IF;
+
 	BEGIN
-        PERFORM 1
+        SELECT costume_item_id INTO r_costume_item_id
         FROM Rentals
         WHERE
             id = p_rental_id
@@ -3327,6 +3340,7 @@ BEGIN
             date_of_return = date_trunc('minute', NOW()::TIMESTAMP)
         WHERE
             id = p_rental_id;
+        CALL update_costume_item_location(r_costume_item_id, p_location_id)
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
