@@ -3482,10 +3482,10 @@ BEGIN
         RAISE EXCEPTION 'Apron name can have between 1 and 30 characters';
     END IF;
 
-    PERFORM 1 -- TODO zmiana w WHERE
+    PERFORM 1
 	FROM Costumes_items
-	WHERE
-		name = p_apron_name;
+	WHERE name = p_apron_name
+      AND id <> p_apron_id;
 
 	IF FOUND THEN
 		RAISE EXCEPTION 'Apron with name % already exist', p_apron_name;
