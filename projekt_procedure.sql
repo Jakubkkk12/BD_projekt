@@ -954,11 +954,10 @@ BEGIN
 	END IF;
 
 	BEGIN
-        PERFORM 1 FROM Musicians WHERE user_id = p_singer_id FOR UPDATE;
+        PERFORM 1 FROM Musicians WHERE user_id = p_musician_id FOR UPDATE;
 
 		INSERT INTO Musician_instrument (musician_id, type_of_instrument_id)
 		VALUES (p_musician_id, p_type_of_instrument_id);
-        
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
