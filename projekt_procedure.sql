@@ -895,7 +895,7 @@ BEGIN
     PERFORM 1
 	FROM Singer_voices
 	WHERE
-		singer_id = p_user_id AND type_of_voice_id = p_type_of_voice_id;
+		singer_id = p_singer_id AND type_of_voice_id = p_type_of_voice_id;
 
 	IF FOUND THEN
 		RAISE EXCEPTION 'Singer with id % can sing with voice of id %', p_singer_id, p_type_of_voice_id;
