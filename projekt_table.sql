@@ -142,10 +142,10 @@ ALTER TABLE Users
     ADD CONSTRAINT Users_UN UNIQUE ( email ) ;
 
 ALTER TABLE Users 
-    ADD CONSTRAINT chk_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
+    ADD CONSTRAINT chk_email_format CHECK (email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
 ALTER TABLE Users 
-    ADD CONSTRAINT chk_phone_format CHECK (phone_number ~* '^\+?[0-9]{7,9}$');
+    ADD CONSTRAINT chk_phone_format CHECK (phone_number ~* '^\+\d{2}\d{9}$');
 
 ALTER TABLE Users 
     ADD CONSTRAINT chk_height_value CHECK (height > 0);

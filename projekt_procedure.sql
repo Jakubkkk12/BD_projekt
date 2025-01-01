@@ -545,12 +545,12 @@ BEGIN
 		RAISE EXCEPTION 'Last name can have between 1 and 30 characters';
 	END IF;
 	
-    IF LENGTH(p_user_email) > 50 OR p_user_email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+    IF LENGTH(p_user_email) > 50 OR p_user_email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' THEN
 		RAISE EXCEPTION 'Wrong email format. min characters - 5, max characters - 50';
 	END IF;
 	
-    IF LENGTH(p_user_phone_number) > 12 OR p_user_phone_number ~* '^\+?[0-9]{7,9}$' THEN
-		RAISE EXCEPTION 'Wrong phone number format, max characters - 12';
+    IF p_user_phone_number ~* '^\+\d{2}\d{9}$' THEN
+		RAISE EXCEPTION 'Wrong phone number format';
 	END IF;
 
      IF p_user_height <= 0 THEN
