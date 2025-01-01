@@ -3280,6 +3280,8 @@ CREATE OR REPLACE PROCEDURE rent_costume_item(
     p_costume_item_id INTEGER,
     p_done_due_request_id INTEGER
 ) AS $$
+DECLARE
+    r_location_id SMALLINT;
 BEGIN
     IF p_user_id IS NULL OR 
     p_costume_item_id IS NULL OR 
@@ -3289,6 +3291,13 @@ BEGIN
 
 	BEGIN
 		CALL add_rental(p_user_id, p_costume_item_id, p_done_due_request_id, date_trunc('minute', NOW()::TIMESTAMP));
+
+        SELECT home_location_id INTO r_location_id
+        FROM Users
+        WHERE
+            id = p_user_id;
+
+        CALL update_costume_item_location(p_costume_item_id, r_location_id);
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
@@ -3340,7 +3349,8 @@ BEGIN
             date_of_return = date_trunc('minute', NOW()::TIMESTAMP)
         WHERE
             id = p_rental_id;
-        CALL update_costume_item_location(r_costume_item_id, p_location_id)
+
+        CALL update_costume_item_location(r_costume_item_id, p_location_id);
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
