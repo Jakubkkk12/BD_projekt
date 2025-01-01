@@ -660,7 +660,7 @@ BEGIN
 	PERFORM 1
 	FROM Roles
 	WHERE
-		id = p_region_id;
+		id = p_role_id;
 
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'Role with id % does not exist', p_role_id;
@@ -721,7 +721,7 @@ BEGIN
 	PERFORM 1
 	FROM Roles
 	WHERE
-		id = p_region_id;
+		id = p_role_id;
 
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'Role with id % does not exist', p_role_id;
@@ -773,7 +773,7 @@ BEGIN
 	PERFORM 1
 	FROM Roles
 	WHERE
-		id = p_region_id;
+		id = p_role_id;
 
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'Role with id % does not exist', p_role_id;
@@ -825,7 +825,7 @@ BEGIN
 	PERFORM 1
 	FROM Roles
 	WHERE
-		id = p_region_id;
+		id = p_role_id;
 
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'Role with id % does not exist', p_role_id;
