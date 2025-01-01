@@ -716,5 +716,21 @@ ASC
 ; 
 
 
+CREATE OR REPLACE VIEW Detailed_rentals ( id, user_id, user_first_name, user_last_name, costume_item_id, costume_item_name, done_due_request_id, date_of_rental, date_of_return ) AS
+SELECT r.id, r.user_id, u.first_name AS "user_first_name", u.last_name AS "user_last_name", r.costume_item_id, ci.name AS "costume_item_name", r.done_due_request_id, r.date_of_rental, r.date_of_return
+FROM Rentals r
+INNER JOIN Users u
+	ON r.user_id = u.id
+INNER JOIN Costumes_items ci
+	ON r.costume_item_id = ci.id
+;
 
 
+CREATE OR REPLACE VIEW Detailed_current_rentals ( id, user_id, user_first_name, user_last_name, costume_item_id, costume_item_name, done_due_request_id, date_of_rental, date_of_return ) AS
+SELECT d.id, d.user_id, d.user_first_name, d.user_last_name, d.costume_item_id, d.costume_item_name, d.done_due_request_id, d.date_of_rental, d.date_of_return
+FROM Detailed_rentals d
+WHERE d.date_of_return IS NULL
+ORDER BY
+	d.date_of_rental
+ASC
+;
