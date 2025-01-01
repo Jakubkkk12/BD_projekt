@@ -2007,7 +2007,7 @@ CREATE OR REPLACE PROCEDURE add_boots(
     p_gender_id SMALLINT,
     p_color_id SMALLINT,
     p_location_id SMALLINT,
-    p_boots_shoe_size SMALLINT
+    p_boots_shoe_size FLOAT
 ) AS $$
 DECLARE
     i_id INT;
@@ -3394,6 +3394,1501 @@ BEGIN
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_apron(
+    p_apron_id INT,
+    p_apron_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_apron_length SMALLINT,
+    p_pattern_id SMALLINT
+) AS $$
+BEGIN
+    IF p_apron_id IS NULL OR
+       p_apron_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_apron_length IS NULL OR 
+       p_pattern_id IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_apron_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exists', p_apron_id;
+    END IF;
+
+    PERFORM 1
+    FROM Aprons
+    WHERE costume_item_id = p_apron_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not apron';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_apron_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF LENGTH(p_apron_name) > 30 OR LENGTH(p_apron_name) < 1 THEN
+        RAISE EXCEPTION 'Apron name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1 -- TODO zmiana w WHERE
+	FROM Costumes_items
+	WHERE
+		name = p_apron_name;
+
+	IF FOUND THEN
+		RAISE EXCEPTION 'Apron with name % already exist', p_apron_name;
+	END IF;
+
+    BEGIN
+        PERFORM 1
+	    FROM Costumes_items
+	    WHERE
+		    id = p_apron_id
+        FOR UPDATE;
+
+        PERFORM 1
+	    FROM Aprons
+	    WHERE
+		    costume_item_id = p_apron_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_apron_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_apron_id;
+
+        UPDATE Aprons
+        SET length = p_apron_length,
+            pattern_id = p_pattern_id
+        WHERE costume_item_id = p_apron_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_head_accessory(
+    p_head_accessory_id INT,
+    p_head_accessory_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_head_accessory_head_circumference SMALLINT,
+    p_category_id SMALLINT
+) AS $$
+BEGIN
+    IF p_head_accessory_id IS NULL OR
+       p_head_accessory_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_category_id IS NULL THEN 
+        RAISE EXCEPTION 'Only head circumference parameter can be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_head_accessory_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_head_accessory_id;
+    END IF;
+
+    PERFORM 1
+    FROM Head_accessories
+    WHERE costume_item_id = p_head_accessory_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a head accessory';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    PERFORM 1
+    FROM Head_accessory_categories
+    WHERE id = p_category_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Head accessory category with id % does not exist', p_category_id;
+    END IF;
+
+    IF p_head_accessory_head_circumference IS NOT NULL AND p_head_accessory_head_circumference <= 0 THEN
+        RAISE EXCEPTION 'Head circumference must be greater than 0';
+    END IF;
+
+    IF LENGTH(p_head_accessory_name) > 30 OR LENGTH(p_head_accessory_name) < 1 THEN
+        RAISE EXCEPTION 'Head accessory name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_head_accessory_name
+      AND id <> p_head_accessory_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Head accessory with name % already exists', p_head_accessory_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_head_accessory_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Head_accessories
+        WHERE costume_item_id = p_head_accessory_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_head_accessory_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_head_accessory_id;
+
+        UPDATE Head_accessories
+        SET category_id = p_category_id,
+            head_circumference = p_head_accessory_head_circumference
+        WHERE costume_item_id = p_head_accessory_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_caftan(
+    p_caftan_id INT,
+    p_caftan_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_caftan_length SMALLINT,
+    p_caftan_min_waist_circumference SMALLINT,
+    p_caftan_max_waist_circumference SMALLINT,
+    p_caftan_min_chest_circumference SMALLINT,
+    p_caftan_max_chest_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_caftan_id IS NULL OR
+       p_caftan_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_caftan_length IS NULL OR 
+       p_caftan_min_waist_circumference IS NULL OR 
+       p_caftan_max_waist_circumference IS NULL OR 
+       p_caftan_min_chest_circumference IS NULL OR 
+       p_caftan_max_chest_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_caftan_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_caftan_id;
+    END IF;
+
+    PERFORM 1
+    FROM Caftans
+    WHERE costume_item_id = p_caftan_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a caftan';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_caftan_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF p_caftan_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_caftan_max_waist_circumference < p_caftan_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF p_caftan_min_chest_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min chest circumference must be greater than 0';
+    END IF;
+
+    IF p_caftan_max_chest_circumference < p_caftan_min_chest_circumference THEN
+        RAISE EXCEPTION 'Max chest circumference must be greater or equal than min chest circumference';
+    END IF;
+
+    IF LENGTH(p_caftan_name) > 30 OR LENGTH(p_caftan_name) < 1 THEN
+        RAISE EXCEPTION 'Caftan name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_caftan_name
+      AND id <> p_caftan_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Caftan with name % already exists', p_caftan_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_caftan_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Caftans
+        WHERE costume_item_id = p_caftan_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_caftan_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_caftan_id;
+
+        UPDATE Caftans
+        SET length = p_caftan_length,
+            min_waist_circumference = p_caftan_min_waist_circumference,
+            max_waist_circumference = p_caftan_max_waist_circumference,
+            min_chest_circumference = p_caftan_min_chest_circumference,
+            max_chest_circumference = p_caftan_max_chest_circumference
+        WHERE costume_item_id = p_caftan_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_petticoat(
+    p_petticoat_id INT,
+    p_petticoat_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_petticoat_length SMALLINT,
+    p_petticoat_min_waist_circumference SMALLINT,
+    p_petticoat_max_waist_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_petticoat_id IS NULL OR
+       p_petticoat_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_petticoat_length IS NULL OR 
+       p_petticoat_min_waist_circumference IS NULL OR 
+       p_petticoat_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_petticoat_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_petticoat_id;
+    END IF;
+
+    PERFORM 1
+    FROM Petticoats
+    WHERE costume_item_id = p_petticoat_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a petticoat';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_petticoat_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF p_petticoat_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_petticoat_max_waist_circumference < p_petticoat_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF LENGTH(p_petticoat_name) > 30 OR LENGTH(p_petticoat_name) < 1 THEN
+        RAISE EXCEPTION 'Petticoat name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_petticoat_name
+      AND id <> p_petticoat_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Petticoat with name % already exists', p_petticoat_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_petticoat_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Petticoats
+        WHERE costume_item_id = p_petticoat_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_petticoat_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_petticoat_id;
+
+        UPDATE Petticoats
+        SET length = p_petticoat_length,
+            min_waist_circumference = p_petticoat_min_waist_circumference,
+            max_waist_circumference = p_petticoat_max_waist_circumference
+        WHERE costume_item_id = p_petticoat_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_corset(
+    p_corset_id INT,
+    p_corset_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_corset_length SMALLINT,
+    p_corset_min_waist_circumference SMALLINT,
+    p_corset_max_waist_circumference SMALLINT,
+    p_corset_min_chest_circumference SMALLINT,
+    p_corset_max_chest_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_corset_id IS NULL OR
+       p_corset_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_corset_length IS NULL OR 
+       p_corset_min_waist_circumference IS NULL OR 
+       p_corset_max_waist_circumference IS NULL OR 
+       p_corset_min_chest_circumference IS NULL OR 
+       p_corset_max_chest_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_corset_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_corset_id;
+    END IF;
+
+    PERFORM 1
+    FROM Corsets
+    WHERE costume_item_id = p_corset_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a corset';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_corset_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF p_corset_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_corset_max_waist_circumference < p_corset_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF p_corset_min_chest_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min chest circumference must be greater than 0';
+    END IF;
+
+    IF p_corset_max_chest_circumference < p_corset_min_chest_circumference THEN
+        RAISE EXCEPTION 'Max chest circumference must be greater or equal than min chest circumference';
+    END IF;
+
+    IF LENGTH(p_corset_name) > 30 OR LENGTH(p_corset_name) < 1 THEN
+        RAISE EXCEPTION 'Corset name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_corset_name
+      AND id <> p_corset_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Corset with name % already exists', p_corset_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_corset_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Corsets
+        WHERE costume_item_id = p_corset_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_corset_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_corset_id;
+
+        UPDATE Corsets
+        SET length = p_corset_length,
+            min_waist_circumference = p_corset_min_waist_circumference,
+            max_waist_circumference = p_corset_max_waist_circumference,
+            min_chest_circumference = p_corset_min_chest_circumference,
+            max_chest_circumference = p_corset_max_chest_circumference
+        WHERE costume_item_id = p_corset_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_skirt(
+    p_skirt_id INT,
+    p_skirt_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_skirt_length SMALLINT,
+    p_skirt_min_waist_circumference SMALLINT,
+    p_skirt_max_waist_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_skirt_id IS NULL OR
+       p_skirt_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_skirt_length IS NULL OR 
+       p_skirt_min_waist_circumference IS NULL OR 
+       p_skirt_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_skirt_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_skirt_id;
+    END IF;
+
+    PERFORM 1
+    FROM Skirts
+    WHERE costume_item_id = p_skirt_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a skirt';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_skirt_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF p_skirt_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_skirt_max_waist_circumference < p_skirt_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF LENGTH(p_skirt_name) > 30 OR LENGTH(p_skirt_name) < 1 THEN
+        RAISE EXCEPTION 'Skirt name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_skirt_name
+      AND id <> p_skirt_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Skirt with name % already exists', p_skirt_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_skirt_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Skirts
+        WHERE costume_item_id = p_skirt_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_skirt_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_skirt_id;
+
+        UPDATE Skirts
+        SET length = p_skirt_length,
+            min_waist_circumference = p_skirt_min_waist_circumference,
+            max_waist_circumference = p_skirt_max_waist_circumference
+        WHERE costume_item_id = p_skirt_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_belt(
+    p_belt_id INT,
+    p_belt_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_belt_min_waist_circumference SMALLINT,
+    p_belt_max_waist_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_belt_id IS NULL OR
+       p_belt_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR  
+       p_belt_min_waist_circumference IS NULL OR 
+       p_belt_max_waist_circumference IS NULL THEN 
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_belt_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_belt_id;
+    END IF;
+
+    PERFORM 1
+    FROM Belts
+    WHERE costume_item_id = p_belt_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a belt';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_belt_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_belt_max_waist_circumference < p_belt_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF LENGTH(p_belt_name) > 30 OR LENGTH(p_belt_name) < 1 THEN
+        RAISE EXCEPTION 'Belt name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_belt_name
+      AND id <> p_belt_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Belt with name % already exists', p_belt_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_belt_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Belts
+        WHERE costume_item_id = p_belt_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_belt_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_belt_id;
+
+        UPDATE Belts
+        SET min_waist_circumference = p_belt_min_waist_circumference,
+            max_waist_circumference = p_belt_max_waist_circumference
+        WHERE costume_item_id = p_belt_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_shirt(
+    p_shirt_id INT,
+    p_shirt_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_shirt_length SMALLINT,
+    p_shirt_arm_length SMALLINT,
+    p_shirt_min_waist_circumference SMALLINT,
+    p_shirt_max_waist_circumference SMALLINT,
+    p_shirt_min_chest_circumference SMALLINT,
+    p_shirt_max_chest_circumference SMALLINT,
+    p_shirt_min_neck_circumference SMALLINT,
+    p_shirt_max_neck_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_shirt_id IS NULL OR
+       p_shirt_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_shirt_length IS NULL OR 
+       p_shirt_arm_length IS NULL OR  
+       p_shirt_min_waist_circumference IS NULL OR 
+       p_shirt_max_waist_circumference IS NULL OR 
+       p_shirt_min_chest_circumference IS NULL OR 
+       p_shirt_max_chest_circumference IS NULL OR 
+       p_shirt_min_neck_circumference IS NULL OR 
+       p_shirt_max_neck_circumference IS NULL THEN
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_shirt_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_shirt_id;
+    END IF;
+
+    PERFORM 1
+    FROM Shirts
+    WHERE costume_item_id = p_shirt_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a shirt';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_shirt_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF p_shirt_arm_length <= 0 THEN
+        RAISE EXCEPTION 'Arm length must be greater than 0';
+    END IF;
+
+    IF p_shirt_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_shirt_max_waist_circumference < p_shirt_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF p_shirt_min_chest_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min chest circumference must be greater than 0';
+    END IF;
+
+    IF p_shirt_max_chest_circumference < p_shirt_min_chest_circumference THEN
+        RAISE EXCEPTION 'Max chest circumference must be greater or equal than min chest circumference';
+    END IF;
+
+    IF p_shirt_min_neck_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min neck circumference must be greater than 0';
+    END IF;
+
+    IF p_shirt_max_neck_circumference < p_shirt_min_neck_circumference THEN
+        RAISE EXCEPTION 'Max neck circumference must be greater or equal than min neck circumference';
+    END IF;
+
+    IF LENGTH(p_shirt_name) > 30 OR LENGTH(p_shirt_name) < 1 THEN
+        RAISE EXCEPTION 'Shirt name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_shirt_name
+      AND id <> p_shirt_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Shirt with name % already exists', p_shirt_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_shirt_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Shirts
+        WHERE costume_item_id = p_shirt_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_shirt_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_shirt_id;
+
+        UPDATE Shirts
+        SET length = p_shirt_length,
+	    arm_length = p_shirt_arm_length,
+            min_waist_circumference = p_shirt_min_waist_circumference,
+            max_waist_circumference = p_shirt_max_waist_circumference,
+            min_chest_circumference = p_shirt_min_chest_circumference,
+            max_chest_circumference = p_shirt_max_chest_circumference,
+            min_neck_circumference = p_shirt_min_neck_circumference,
+            max_neck_circumference = p_shirt_max_neck_circumference
+        WHERE costume_item_id = p_shirt_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_pants(
+    p_pants_id INT,
+    p_pants_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_pants_length SMALLINT,
+    p_pants_min_waist_circumference SMALLINT,
+    p_pants_max_waist_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_pants_id IS NULL OR
+       p_pants_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_pants_length IS NULL OR 
+       p_pants_min_waist_circumference IS NULL OR 
+       p_pants_max_waist_circumference IS NULL THEN
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_pants_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_pants_id;
+    END IF;
+
+    PERFORM 1
+    FROM Pants
+    WHERE costume_item_id = p_pants_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a pants';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_pants_length <= 0 THEN
+        RAISE EXCEPTION 'Length must be greater than 0';
+    END IF;
+
+    IF p_pants_min_waist_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    END IF;
+
+    IF p_pants_max_waist_circumference < p_pants_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    END IF;
+
+    IF LENGTH(p_pants_name) > 30 OR LENGTH(p_pants_name) < 1 THEN
+        RAISE EXCEPTION 'Pants name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_pants_name
+      AND id <> p_pants_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Pants with name % already exists', p_pants_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_pants_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Pants
+        WHERE costume_item_id = p_pants_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_pants_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_pants_id;
+
+        UPDATE Pants
+        SET length = p_pants_length,
+            min_waist_circumference = p_pants_min_waist_circumference,
+            max_waist_circumference = p_pants_max_waist_circumference
+        WHERE costume_item_id = p_pants_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_boots(
+    p_boots_id INT,
+    p_boots_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_boots_shoe_size FLOAT
+) AS $$
+BEGIN
+    IF p_boots_id IS NULL OR
+       p_boots_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_boots_shoe_size IS NULL THEN
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_boots_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_boots_id;
+    END IF;
+
+    PERFORM 1
+    FROM Boots
+    WHERE costume_item_id = p_boots_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a boots';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_boots_shoe_size <= 0 THEN
+        RAISE EXCEPTION 'Shoe size must be greater than 0';
+    END IF;
+    IF LENGTH(p_boots_name) > 30 OR LENGTH(p_boots_name) < 1 THEN
+        RAISE EXCEPTION 'Boots name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_boots_name
+      AND id <> p_boots_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Boots with name % already exists', p_boots_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_boots_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Boots
+        WHERE costume_item_id = p_boots_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_boots_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_boots_id;
+
+        UPDATE Boots
+        SET shoe_size = p_boots_shoe_size
+        WHERE costume_item_id = p_boots_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE PROCEDURE update_neck_accessory(
+    p_neck_accessory_id INT,
+    p_neck_accessory_name VARCHAR(30),
+    p_collection_id SMALLINT,
+    p_gender_id SMALLINT,
+    p_color_id SMALLINT,
+    p_location_id SMALLINT,
+    p_neck_accessory_min_neck_circumference SMALLINT,
+    p_neck_accessory_max_neck_circumference SMALLINT
+) AS $$
+BEGIN
+    IF p_neck_accessory_id IS NULL OR
+       p_neck_accessory_name IS NULL OR 
+       p_collection_id IS NULL OR 
+       p_gender_id IS NULL OR 
+       p_color_id IS NULL OR 
+       p_location_id IS NULL OR 
+       p_neck_accessory_min_neck_circumference IS NULL OR 
+       p_neck_accessory_max_neck_circumference IS NULL THEN
+        RAISE EXCEPTION 'All parameters cannot be NULL';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE id = p_neck_accessory_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % does not exist', p_neck_accessory_id;
+    END IF;
+
+    PERFORM 1
+    FROM Neck_accessories
+    WHERE costume_item_id = p_neck_accessory_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Costume item is not a neck accessory';
+    END IF;
+
+    PERFORM 1
+    FROM Collections
+    WHERE id = p_collection_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
+    END IF;
+
+    IF p_gender_id NOT IN (1, 2, 3) THEN
+        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
+    END IF;
+
+    PERFORM 1
+    FROM Genders
+    WHERE id = p_gender_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
+    END IF;
+
+    PERFORM 1
+    FROM Colors
+    WHERE id = p_color_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
+    END IF;
+
+    PERFORM 1
+    FROM Locations
+    WHERE id = p_location_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    END IF;
+
+    IF p_neck_accessory_min_neck_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min neck circumference must be greater than 0';
+    END IF;
+
+    IF p_neck_accessory_max_neck_circumference < p_neck_accessory_min_waist_circumference THEN
+        RAISE EXCEPTION 'Max neck circumference must be greater or equal than min neck circumference';
+    END IF;
+
+    IF LENGTH(p_neck_accessory_name) > 30 OR LENGTH(p_neck_accessory_name) < 1 THEN
+        RAISE EXCEPTION 'Neck accessory name can have between 1 and 30 characters';
+    END IF;
+
+    PERFORM 1
+    FROM Costumes_items
+    WHERE name = p_neck_accessory_name
+      AND id <> p_neck_accessory_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Neck accessory with name % already exists', p_neck_accessory_name;
+    END IF;
+
+    BEGIN
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = p_neck_accessory_id
+        FOR UPDATE;
+
+        PERFORM 1
+        FROM Neck_accessories
+        WHERE costume_item_id = p_neck_accessory_id
+        FOR UPDATE;
+
+        UPDATE Costumes_items
+        SET name = p_neck_accessory_name,
+            collection_id = p_collection_id,
+            gender_id = p_gender_id,
+            color_id = p_color_id,
+            location_id = p_location_id
+        WHERE id = p_neck_accessory_id;
+
+        UPDATE Neck_accessories
+        SET min_neck_circumference = p_neck_accessory_min_neck_circumference,
+            max_neck_circumference = p_neck_accessory_max_neck_circumference
+        WHERE costume_item_id = p_neck_accessory_id;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE EXCEPTION 'Failed to update: %', SQLERRM;
     END;
 END;
 $$ LANGUAGE plpgsql;
