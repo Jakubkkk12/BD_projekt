@@ -2098,8 +2098,8 @@ CREATE OR REPLACE PROCEDURE add_neck_accessory(
     p_gender_id SMALLINT,
     p_color_id SMALLINT,
     p_location_id SMALLINT,
-    p_neck_accessory_min_waist_circumference SMALLINT,
-    p_neck_accessory_max_waist_circumference SMALLINT
+    p_neck_accessory_min_neck_circumference SMALLINT,
+    p_neck_accessory_max_neck_circumference SMALLINT
 ) AS $$
 DECLARE
     i_id INT;
@@ -2109,8 +2109,8 @@ BEGIN
     p_gender_id IS NULL OR 
     p_color_id IS NULL OR 
     p_location_id IS NULL OR 
-    p_neck_accessory_min_waist_circumference IS NULL OR 
-    p_neck_accessory_max_waist_circumference IS NULL THEN 
+    p_neck_accessory_min_neck_circumference IS NULL OR 
+    p_neck_accessory_max_neck_circumference IS NULL THEN 
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
@@ -2154,12 +2154,12 @@ BEGIN
 		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
 	END IF;
 
-    IF p_neck_accessory_min_waist_circumference <= 0 THEN
-        RAISE EXCEPTION 'Min waist circumference must be greater than 0';
+    IF p_neck_accessory_min_neck_circumference <= 0 THEN
+        RAISE EXCEPTION 'Min neck circumference must be greater than 0';
     END IF;
 
-    IF p_neck_accessory_max_waist_circumference < p_neck_accessory_min_waist_circumference THEN
-        RAISE EXCEPTION 'Max waist circumference must be greater or equal than min waist circumference';
+    IF p_neck_accessory_max_neck_circumference < p_neck_accessory_min_neck_circumference THEN
+        RAISE EXCEPTION 'Max neck circumference must be greater or equal than min waist circumference';
     END IF;
 
     IF LENGTH(p_neck_accessory_name) > 30 OR LENGTH(p_neck_accessory_name) < 1 THEN
@@ -2179,8 +2179,8 @@ BEGIN
         INSERT INTO Costumes_items (name, collection_id, gender_id, color_id, location_id)
         VALUES (p_neck_accessory_name, p_collection_id, p_gender_id, p_color_id, p_location_id) RETURNING id INTO i_id;
 
-		INSERT INTO Neck_accessories (costume_item_id, min_waist_circumference, max_waist_circumference)
-		VALUES (i_id, p_neck_accessory_min_waist_circumference, p_neck_accessory_max_waist_circumference);
+		INSERT INTO Neck_accessories (costume_item_id, min_neck_circumference, max_neck_circumference)
+		VALUES (i_id, p_neck_accessory_min_neck_circumference, p_neck_accessory_max_neck_circumference);
         
 	EXCEPTION
 		WHEN OTHERS THEN
@@ -4855,7 +4855,7 @@ BEGIN
         RAISE EXCEPTION 'Min neck circumference must be greater than 0';
     END IF;
 
-    IF p_neck_accessory_max_neck_circumference < p_neck_accessory_min_waist_circumference THEN
+    IF p_neck_accessory_max_neck_circumference < p_neck_accessory_min_neck_circumference THEN
         RAISE EXCEPTION 'Max neck circumference must be greater or equal than min neck circumference';
     END IF;
 
