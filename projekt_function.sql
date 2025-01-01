@@ -12,23 +12,18 @@ RETURNS TABLE (
 BEGIN
     RETURN QUERY
     SELECT 
-        ci.name, 
-        u.first_name, 
-        u.last_name, 
-        r.date_of_rental, 
-        r.date_of_return
+        d.costume_item_name,
+        d.user_id,
+        d.user_first_name,
+        d.user_last_name,
+        d.date_of_rental,
+        d.date_of_return
     FROM 
-        Rentals r
-    INNER JOIN 
-        Users u
-        ON r.user_id = u.id
-    INNER JOIN 
-        Costumes_items ci
-        ON r.costume_item_id = ci.id
+        Detailed_rentals d
     WHERE 
-       r.costume_item_id = f_costume_item_id
+       d.costume_item_id = f_costume_item_id
     ORDER BY
-        date_of_rental
+        d.date_of_rental
     ASC; 
 END;
 $$ LANGUAGE plpgsql;
