@@ -138,7 +138,6 @@ BEGIN
         END IF;
     END IF;
 
-
     IF f_apron_id IS NOT NULL THEN
         PERFORM 1
         FROM Aprons
@@ -273,7 +272,7 @@ $$ LANGUAGE plpgsql;
 CREATE FUNCTION check_rental_inconsistency(
     f_user_id                INTEGER, 
     f_costume_item_id        INTEGER, 
-    f_done_due_request_id INTEGER
+    f_done_due_request_id    INTEGER
 )
 RETURNS BOOLEAN AS $$
 DECLARE
@@ -281,7 +280,6 @@ DECLARE
     r_costume_item_id INT;
     inconsistency_found BOOLEAN := FALSE;
 BEGIN
-
 	SELECT r.requester_user_id, COALESCE(ren_r.costume_item_id, ret_r.costume_item_id, b_r.costume_item_id) INTO r_user_id, r_costume_item_id
 	FROM Requests r
     LEFT JOIN Rental_costume_item_requests ren_r
