@@ -549,49 +549,49 @@ test_cases = {
         ]
     },
     "add_shirt": {
-        "query": "CALL add_shirt(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_shirt(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT );",
         "data": [
-            ("Shirt1", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
-            ("Shirt2", 2, 2, 2, 2, 75, 65, 75, 95, 42, 47, 36),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
+            ("Shirt1", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
+            ("Shirt2", 2, 2, 2, 2, 75, 65, 75, 95, 42, 47, 36, 40),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
 
             # Rekord z błędem: Brak p_shirt_name (None)
-            (None, 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35),  # Błąd: Parametr p_shirt_name = None
+            (None, 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Parametr p_shirt_name = None
 
             # Rekord z błędem: Nieistniejący collection_id
-            ("Shirt3", 10, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35),  # Błąd: Collection z id 10 nie istnieje
+            ("Shirt3", 10, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Collection z id 10 nie istnieje
 
             # Rekord z błędem: Nieistniejący gender_id
-            ("Shirt4", 1, 99, 1, 1, 70, 60, 70, 90, 40, 45, 35),  # Błąd: Gender z id 99 nie istnieje
+            ("Shirt4", 1, 99, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Gender z id 99 nie istnieje
 
             # Rekord z błędem: Nieistniejący color_id
-            ("Shirt5", 1, 1, 99, 1, 70, 60, 70, 90, 40, 45, 35),  # Błąd: Color z id 99 nie istnieje
+            ("Shirt5", 1, 1, 99, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Color z id 99 nie istnieje
 
             # Rekord z błędem: Nieistniejący location_id
-            ("Shirt6", 1, 1, 1, 99, 70, 60, 70, 90, 40, 45, 35),  # Błąd: Location z id 99 nie istnieje
+            ("Shirt6", 1, 1, 1, 99, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Location z id 99 nie istnieje
 
             # Rekord z błędem: Brak wymaganych parametrów (null)
-            ("Shirt7", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, None),  # Błąd: p_shirt_max_neck_circumference = None
+            ("Shirt7", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, None, 40),  # Błąd: p_shirt_max_neck_circumference = None
 
             # Rekord z błędem: Arm length <= 0
-            ("Shirt8", 1, 1, 1, 1, 70, -10, 70, 90, 40, 45, 35),  # Błąd: p_shirt_arm_length <= 0
+            ("Shirt8", 1, 1, 1, 1, 70, -10, 70, 90, 40, 45, 35, 40),  # Błąd: p_shirt_arm_length <= 0
 
             # Rekord z błędem: Min waist circumference <= 0
-            ("Shirt9", 1, 1, 1, 1, 70, 60, -10, 90, 40, 45, 35),  # Błąd: p_shirt_min_waist_circumference <= 0
+            ("Shirt9", 1, 1, 1, 1, 70, 60, -10, 90, 40, 45, 35, 40),  # Błąd: p_shirt_min_waist_circumference <= 0
 
             # Rekord z błędem: Max waist circumference < min waist circumference
-            ("Shirt10", 1, 1, 1, 1, 70, 60, 50, 40, 40, 45, 35),  # Błąd: p_shirt_max_waist_circumference < p_shirt_min_waist_circumference
+            ("Shirt10", 1, 1, 1, 1, 70, 60, 50, 40, 40, 45, 35, 40),  # Błąd: p_shirt_max_waist_circumference < p_shirt_min_waist_circumference
 
             # Rekord z błędem: Max chest circumference < min chest circumference
-            ("Shirt11", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 36),  # Błąd: p_shirt_max_chest_circumference < p_shirt_min_chest_circumference
+            ("Shirt11", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 36, 40),  # Błąd: p_shirt_max_chest_circumference < p_shirt_min_chest_circumference
 
             # Rekord z błędem: Max neck circumference < min neck circumference
-            ("Shirt12", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 30),  # Błąd: p_shirt_max_neck_circumference < p_shirt_min_neck_circumference
+            ("Shirt12", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 30, 29),  # Błąd: p_shirt_max_neck_circumference < p_shirt_min_neck_circumference
 
             # Rekord z błędem: Zbyt długa nazwa p_shirt_name
-            ("S" + "S" * 31, 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35),  # Błąd: Nazwa shirt ma więcej niż 30 znaków
+            ("Sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Nazwa shirt ma więcej niż 30 znaków
 
             # Rekord z błędem: Shirt o tej nazwie już istnieje
-            ("Shirt1", 2, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35)   # Błąd: Shirt o nazwie "Shirt1" już istnieje
+            ("Shirt1", 2, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40)   # Błąd: Shirt o nazwie "Shirt1" już istnieje
         ]
     },
     "add_pants": {
