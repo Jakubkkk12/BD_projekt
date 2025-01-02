@@ -1884,7 +1884,7 @@ BEGIN
 
 		INSERT INTO Shirts (costume_item_id, length, arm_length, min_waist_circumference, max_waist_circumference, 
         min_chest_circumference, max_chest_circumference, min_neck_circumference, max_neck_circumference)
-		VALUES (i_id, p_shirt_length, p_shirt_min_waist_circumference, p_shirt_max_waist_circumference,
+		VALUES (i_id, p_shirt_length, p_shirt_arm_length, p_shirt_min_waist_circumference, p_shirt_max_waist_circumference,
         p_shirt_min_chest_circumference, p_shirt_max_chest_circumference, p_shirt_min_neck_circumference, p_shirt_max_neck_circumference);
 	EXCEPTION
 		WHEN OTHERS THEN
