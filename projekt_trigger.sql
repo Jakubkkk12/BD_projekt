@@ -174,7 +174,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER prevent_invalid_return_costume_item_request_insert BEFORE INSERT ON Rental_costume_item_requests
+CREATE TRIGGER prevent_invalid_return_costume_item_request_insert BEFORE INSERT ON Return_costume_item_requests
 FOR EACH ROW EXECUTE FUNCTION check_return_costume_item_request_costume_item();
 
 
