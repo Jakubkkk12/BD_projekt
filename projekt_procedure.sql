@@ -2211,7 +2211,7 @@ BEGIN
         WHERE
             id = p_due_to_request_id;
 
-        IF p_user_id = r_user_id THEN
+        IF p_user_id <> r_user_id THEN
             RAISE EXCEPTION 'User id and requester user id from request with % are not the same', p_due_to_request_id;
         END IF;
     END IF;
