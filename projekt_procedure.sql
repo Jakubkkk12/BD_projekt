@@ -2276,6 +2276,17 @@ BEGIN
     IF check_rental_inconsistency(p_user_id, p_costume_item_id, p_done_due_request_id) THEN
         RAISE EXCEPTION 'Rental is inconsistency';
     END IF;
+
+    PERFORM 1
+    FROM Rentals
+    WHERE
+        costume_item_id = p_costume_item_id
+        AND
+        date_of_return IS NULL;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Costume item with id % is already rented', p_costume_item_id;
+    END IF;
     
 	BEGIN
 		INSERT INTO Rentals (user_id, costume_item_id, done_due_request_id, date_of_rental)
