@@ -307,3 +307,68 @@ BEGIN
     RETURN FALSE;
 END;
 $$ LANGUAGE plpgsql;
+
+
+
+CREATE FUNCTION check_if_error_in_costume_item_common_part(
+    f_collection_id                SMALLINT, 
+    f_gender_id        SMALLINT, 
+    f_color_id    SMALLINT,
+    f_location_id    SMALLINT
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    error_found BOOLEAN := FALSE;
+BEGIN
+	PERFORM 1
+	FROM Collections
+	WHERE
+		id = f_collection_id;
+
+	IF NOT FOUND THEN
+		RAISE NOTICE 'Collection with id % does not exist', f_collection_id;
+        error_found := TRUE;
+	END IF;
+
+    IF f_gender_id NOT IN (1, 2, 3) THEN
+        RAISE NOTICE 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+        error_found := TRUE;
+    END IF;
+	
+    PERFORM 1
+	FROM Genders
+	WHERE
+		id = f_gender_id;
+
+	IF NOT FOUND THEN
+		RAISE NOTICE 'Gender with id % does not exist', f_gender_id;
+        error_found := TRUE;
+	END IF;
+
+    PERFORM 1
+	FROM Colors
+	WHERE
+		id = f_color_id;
+
+	IF NOT FOUND THEN
+		RAISE NOTICE 'Color with id % does not exist', f_color_id;
+        error_found := TRUE;
+	END IF;
+
+    PERFORM 1
+	FROM Locations
+	WHERE
+		id = f_location_id;
+
+	IF NOT FOUND THEN
+		RAISE NOTICE 'Location with id % does not exist', f_location_id;
+        error_found := TRUE;
+	END IF;
+
+    IF error_found THEN
+        RETURN TRUE;
+    END IF;
+	
+    RETURN FALSE;
+END;
+$$ LANGUAGE plpgsql;
