@@ -159,7 +159,7 @@ RETURNS TABLE (
     user_first_name VARCHAR,
     user_last_name VARCHAR,
     costume_item_id INT,
-    costume_item_name VARCHAR,
+    costume_item_name VARCHAR
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -678,14 +678,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-p_apron_name VARCHAR(30),
-    p_collection_id SMALLINT,
-    p_gender_id SMALLINT,
-    p_color_id SMALLINT,
-    p_location_id SMALLINT,
-    p_apron_length SMALLINT,
-    p_pattern_id SMALLINT
 
 CREATE OR REPLACE FUNCTION get_user_unclosed_costume_item_requests(
     f_user_id INT
