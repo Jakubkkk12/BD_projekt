@@ -1041,44 +1041,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
-    END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+	IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN
+		RAISE EXCEPTION 'Something wrong in costume item common part';
 	END IF;
 
     IF p_apron_length <= 0 THEN
@@ -1134,44 +1098,8 @@ BEGIN
         RAISE EXCEPTION 'Only head circumference parameter can be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
-    END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+	IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN
+		RAISE EXCEPTION 'Something wrong in costume item common part';
 	END IF;
 
     PERFORM 1
@@ -1243,44 +1171,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
-    END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+	IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN
+		RAISE EXCEPTION 'Something wrong in costume item common part';
 	END IF;
 
     IF p_caftan_length <= 0 THEN
@@ -1358,45 +1250,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_petticoat_length <= 0 THEN
         RAISE EXCEPTION 'Length must be greater than 0';
@@ -1466,45 +1322,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+	IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_corset_length <= 0 THEN
         RAISE EXCEPTION 'Length must be greater than 0';
@@ -1580,45 +1400,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_skirt_length <= 0 THEN
         RAISE EXCEPTION 'Length must be greater than 0';
@@ -1682,45 +1466,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_belt_min_waist_circumference <= 0 THEN
         RAISE EXCEPTION 'Min waist circumference must be greater than 0';
@@ -1793,45 +1541,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_shirt_length <= 0 THEN
         RAISE EXCEPTION 'Length must be greater than 0';
@@ -1919,45 +1631,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_pants_length <= 0 THEN
         RAISE EXCEPTION 'Length must be greater than 0';
@@ -2020,45 +1696,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_boots_shoe_size <= 0 THEN
         RAISE EXCEPTION 'Shoe size must be greater than 0';
@@ -2114,45 +1754,9 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-	PERFORM 1
-	FROM Collections
-	WHERE
-		id = p_collection_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-	END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male) or 2 (female) or 3 (bigender) can be selected';
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
-	
-    PERFORM 1
-	FROM Genders
-	WHERE
-		id = p_gender_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-	END IF;
-
-    PERFORM 1
-	FROM Colors
-	WHERE
-		id = p_color_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-	END IF;
-
-    PERFORM 1
-	FROM Locations
-	WHERE
-		id = p_location_id;
-
-	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
-	END IF;
 
     IF p_neck_accessory_min_neck_circumference <= 0 THEN
         RAISE EXCEPTION 'Min neck circumference must be greater than 0';
@@ -3431,56 +3035,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_apron_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exists', p_apron_id;
-    END IF;
-
-    PERFORM 1
-    FROM Aprons
-    WHERE costume_item_id = p_apron_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not apron';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_apron_length <= 0 THEN
@@ -3555,56 +3111,8 @@ BEGIN
         RAISE EXCEPTION 'Only head circumference parameter can be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_head_accessory_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_head_accessory_id;
-    END IF;
-
-    PERFORM 1
-    FROM Head_accessories
-    WHERE costume_item_id = p_head_accessory_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a head accessory';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     PERFORM 1
@@ -3692,56 +3200,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_caftan_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_caftan_id;
-    END IF;
-
-    PERFORM 1
-    FROM Caftans
-    WHERE costume_item_id = p_caftan_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a caftan';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_caftan_length <= 0 THEN
@@ -3836,56 +3296,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_petticoat_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_petticoat_id;
-    END IF;
-
-    PERFORM 1
-    FROM Petticoats
-    WHERE costume_item_id = p_petticoat_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a petticoat';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_petticoat_length <= 0 THEN
@@ -3974,56 +3386,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_corset_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_corset_id;
-    END IF;
-
-    PERFORM 1
-    FROM Corsets
-    WHERE costume_item_id = p_corset_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a corset';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_corset_length <= 0 THEN
@@ -4118,56 +3482,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_skirt_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_skirt_id;
-    END IF;
-
-    PERFORM 1
-    FROM Skirts
-    WHERE costume_item_id = p_skirt_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a skirt';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_skirt_length <= 0 THEN
@@ -4250,56 +3566,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_belt_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_belt_id;
-    END IF;
-
-    PERFORM 1
-    FROM Belts
-    WHERE costume_item_id = p_belt_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a belt';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_belt_min_waist_circumference <= 0 THEN
@@ -4389,56 +3657,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_shirt_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_shirt_id;
-    END IF;
-
-    PERFORM 1
-    FROM Shirts
-    WHERE costume_item_id = p_shirt_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a shirt';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_shirt_length <= 0 THEN
@@ -4548,56 +3768,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_pants_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_pants_id;
-    END IF;
-
-    PERFORM 1
-    FROM Pants
-    WHERE costume_item_id = p_pants_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a pants';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_pants_length <= 0 THEN
@@ -4678,56 +3850,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_boots_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_boots_id;
-    END IF;
-
-    PERFORM 1
-    FROM Boots
-    WHERE costume_item_id = p_boots_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a boots';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_boots_shoe_size <= 0 THEN
@@ -4799,56 +3923,8 @@ BEGIN
         RAISE EXCEPTION 'All parameters cannot be NULL';
     END IF;
 
-    PERFORM 1
-    FROM Costumes_items
-    WHERE id = p_neck_accessory_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item with id % does not exist', p_neck_accessory_id;
-    END IF;
-
-    PERFORM 1
-    FROM Neck_accessories
-    WHERE costume_item_id = p_neck_accessory_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Costume item is not a neck accessory';
-    END IF;
-
-    PERFORM 1
-    FROM Collections
-    WHERE id = p_collection_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Collection with id % does not exist', p_collection_id;
-    END IF;
-
-    IF p_gender_id NOT IN (1, 2, 3) THEN
-        RAISE EXCEPTION 'Gender with id 1 (male), 2 (female), or 3 (bigender) can be selected';
-    END IF;
-
-    PERFORM 1
-    FROM Genders
-    WHERE id = p_gender_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Gender with id % does not exist', p_gender_id;
-    END IF;
-
-    PERFORM 1
-    FROM Colors
-    WHERE id = p_color_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Color with id % does not exist', p_color_id;
-    END IF;
-
-    PERFORM 1
-    FROM Locations
-    WHERE id = p_location_id;
-
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Location with id % does not exist', p_location_id;
+    IF check_if_error_in_costume_item_common_part(p_collection_id, p_gender_id, p_color_id, p_location_id) THEN 
+        RAISE EXCEPTION 'Something wrong in costume item common part'; 
     END IF;
 
     IF p_neck_accessory_min_neck_circumference <= 0 THEN
