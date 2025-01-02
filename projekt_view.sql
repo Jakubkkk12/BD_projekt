@@ -545,49 +545,49 @@ INNER JOIN Collections col
 	ON c.collection_id=col.id
 INNER JOIN Genders g
 	ON c.gender_id=g.id 
-INNER JOIN Aprons ia
+LEFT JOIN Aprons ia
 	ON c.apron_id=ia.costume_item_id
-INNER JOIN Costumes_items a
+LEFT JOIN Costumes_items a
 	ON ia.costume_item_id=a.id
-INNER JOIN Caftans ica
+LEFT JOIN Caftans ica
 	ON c.caftan_id=ica.costume_item_id
-INNER JOIN Costumes_items ca
-	ON ica.costume_item_id=a.id
-INNER JOIN Petticoats ip
+LEFT JOIN Costumes_items ca
+	ON ica.costume_item_id=ca.id
+LEFT JOIN Petticoats ip
 	ON c.petticoat_id=ip.costume_item_id
-INNER JOIN Costumes_items p
+LEFT JOIN Costumes_items p
 	ON ip.costume_item_id=p.id
-INNER JOIN Corsets ico
+LEFT JOIN Corsets ico
 	ON c.corset_id=ico.costume_item_id
-INNER JOIN Costumes_items co
+LEFT JOIN Costumes_items co
 	ON ico.costume_item_id=co.id
-INNER JOIN Skirts isk
+LEFT JOIN Skirts isk
 	ON c.skirt_id=isk.costume_item_id
-INNER JOIN Costumes_items sk
+LEFT JOIN Costumes_items sk
 	ON isk.costume_item_id=sk.id
-INNER JOIN Belts ib
+LEFT JOIN Belts ib
 	ON c.belt_id=ib.costume_item_id
-INNER JOIN Costumes_items b
+LEFT JOIN Costumes_items b
 	ON ib.costume_item_id=b.id
-INNER JOIN Shirts ish
+LEFT JOIN Shirts ish
 	ON c.shirt_id=ish.costume_item_id
-INNER JOIN Costumes_items sh
+LEFT JOIN Costumes_items sh
 	ON ish.costume_item_id=sh.id
-INNER JOIN Pants ipa
+LEFT JOIN Pants ipa
 	ON c.pants_id=ipa.costume_item_id
-INNER JOIN Costumes_items pa
+LEFT JOIN Costumes_items pa
 	ON ipa.costume_item_id=pa.id
-INNER JOIN Boots ibo
+LEFT JOIN Boots ibo
 	ON c.boots_id=ibo.costume_item_id
-INNER JOIN Costumes_items bo
+LEFT JOIN Costumes_items bo
 	ON ibo.costume_item_id=bo.id
-INNER JOIN Neck_accessories ine
+LEFT JOIN Neck_accessories ine
 	ON c.neck_accessory_id=ine.costume_item_id
-INNER JOIN Costumes_items ne
+LEFT JOIN Costumes_items ne
 	ON ine.costume_item_id=ne.id
-INNER JOIN Head_accessories ih
+LEFT JOIN Head_accessories ih
 	ON c.head_accessory_id=ih.costume_item_id
-INNER JOIN Costumes_items h
+LEFT JOIN Costumes_items h
 	ON ih.costume_item_id=h.id 
 ;
 
