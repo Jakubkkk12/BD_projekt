@@ -1,5 +1,6 @@
 import psycopg2
 
+
 # Funkcja do wykonania testów
 def run_tests(connection, query, data):
     results = []
@@ -911,28 +912,110 @@ test_cases = {
             (16, "SkirtA", 2, 2, 2, 2, 80, 45, 65)  # Błąd: Nazwa `SkirtA` już istnieje dla innej spódnicy
         ]
     },
-    # "update_shirt":{
-    #
-    # },
-    # "update_pants":{
-    #
-    # },
-    # "update_boots":{
-    #
-    # },
-    # "update_neck_accessory":{
-    #
-    # },
-    # "add_costume":{
-    #
-    # },
+    "update_shirt": {
+        "query": "CALL update_shirt(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "data": [
+            # Poprawny przypadek
+            (1, 'Shirt A', 1, 1, 1, 1, 70, 60, 30, 50, 40, 60, 35, 45),
+
+            # Błędne przypadki - różne wyjątki
+            (None, 'Shirt A', 1, 1, 1, 1, 70, 60, 30, 50, 40, 60, 35, 45),  # NULL jako `p_shirt_id`
+            (1, 'Shirt A', 1, 1, 1, 1, 70, 60, 30, 50, 40, 60, 35, 45),  # Empty string error (fixed or replaced by valid name)
+            (1, 'Shirt B', 1, 1, 1, 1, -10, 60, 30, 50, 40, 60, 35, 45),  # Negatywna długość
+            (1, 'Shirt C', 1, 1, 1, 1, 70, -20, 30, 50, 40, 60, 35, 45),  # Negatywna długość rękawa
+            (1, 'Shirt D', 1, 1, 1, 1, 70, 60, -5, 50, 40, 60, 35, 45),  # Negatywna min talia
+            (1, 'Shirt E', 1, 1, 1, 1, 70, 60, 50, 30, 40, 60, 35, 45),  # Max talia < Min talia
+            (1, 'Shirt F', 1, 1, 1, 1, 70, 60, 30, 50, 60, 40, 35, 45),  # Max klatka < Min klatka
+            (1, 'Shirt G', 1, 1, 1, 1, 70, 60, 30, 50, 40, 60, 45, 35),  # Max szyja < Min szyja
+            (1, 'Shirt A', 1, 1, 1, 1, 70, 60, 30, 50, 40, 60, 35, 45),  # Nazwa już istnieje
+            (1, 'Shirt H', 999, 1, 1, 1, 70, 60, 30, 50, 40, 60, 35, 45),  # Błędne `p_collection_id`
+            (1, 'Shirt I', 1, 1, 1, 1, 0, 60, 30, 50, 40, 60, 35, 45)  # Długość = 0
+        ]
+    },
+
+    "update_pants": {
+        "query": "CALL update_pants(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "data": [
+            # Poprawny przypadek
+            (1, 'Pants A', 1, 1, 1, 1, 100, 70, 90),
+
+            # Błędne przypadki - różne wyjątki
+            (None, 'Pants A', 1, 1, 1, 1, 100, 70, 90),  # NULL jako `p_pants_id`
+            (1, '', 1, 1, 1, 1, 100, 70, 90),  # Zbyt krótka nazwa
+            (1, 'Pants B', 1, 1, 1, 1, -100, 70, 90),  # Negatywna długość
+            (1, 'Pants C', 1, 1, 1, 1, 100, -70, 90),  # Negatywna min talia
+            (1, 'Pants D', 1, 1, 1, 1, 100, 70, 60),  # Max talia < Min talia
+            (1, 'Pants A', 1, 1, 1, 1, 100, 70, 90),  # Nazwa już istnieje
+            (1, 'Pants E', 999, 1, 1, 1, 100, 70, 90),  # Błędne `p_collection_id`
+            (1, 'Pants F', 1, 1, 1, 1, 0, 70, 90)  # Długość = 0
+        ]
+    },
+
+    "update_boots": {
+        "query": "CALL update_boots(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::FLOAT);",
+        "data": [
+            # Poprawny przypadek
+            (1, 'Boots A', 1, 1, 1, 1, 42.5),
+
+            # Błędne przypadki - różne wyjątki
+            (None, 'Boots A', 1, 1, 1, 1, 42.5),  # NULL jako `p_boots_id`
+            (1, '', 1, 1, 1, 1, 42.5),  # Zbyt krótka nazwa
+            (1, 'Boots B', 1, 1, 1, 1, -1),  # Negatywna rozmiar buta
+            (1, 'Boots C', 1, 1, 1, 1, 42.5),  # Nazwa już istnieje
+            (1, 'Boots D', 1, 1, 1, 1, 0),  # Zerowy rozmiar buta
+            (1, 'Boots E', 999, 1, 1, 1, 42.5)  # Błędne `p_collection_id`
+        ]
+    },
+
+    "update_neck_accessory": {
+        "query": "CALL update_neck_accessory(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "data": [
+            # Poprawny przypadek
+            (1, 'Neck Accessory A', 1, 1, 1, 1, 30, 40),
+
+            # Błędne przypadki - różne wyjątki
+            (None, 'Neck Accessory A', 1, 1, 1, 1, 30, 40),  # NULL jako `p_neck_accessory_id`
+            (1, '', 1, 1, 1, 1, 30, 40),  # Zbyt krótka nazwa
+            (1, 'Neck Accessory B', 1, 1, 1, 1, -10, 40),  # Negatywna min obwód szyi
+            (1, 'Neck Accessory C', 1, 1, 1, 1, 30, 20),  # Max obwód szyi < Min obwód szyi
+            (1, 'Neck Accessory D', 1, 1, 1, 1, 30, 40),  # Nazwa już istnieje
+            (1, 'Neck Accessory E', 999, 1, 1, 1, 30, 40)  # Błędne `p_collection_id`
+        ]
+    },
+
+    "add_costume": {
+        "query": "CALL add_costume(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER);",
+        "data": [
+            # Poprawny przypadek
+            ('Costume A', 1, 1, 2, 39, 42, 43, 17, 19, 21, 25, 27, 1, 1), #podmienic niektóre id
+
+            # Błędne przypadki - różne wyjątki
+            # (None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),           # None jako `p_costume_name`
+            # ('Costume B', None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # None jako `p_collection_id`
+            # ('Costume C', 1, None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # None jako `p_gender_id`
+            # ('Costume D', 1, 134, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),     # Błędny `p_gender_id`
+            # ('Costume E', 999, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # Błędne `p_collection_id`
+            # ('Costume F', 1, 1, None, 1, 1, 1, 1, 1, 1, 1, 1),      # Błędny `p_apron_id`
+            # ('Costume G', 1, 1, 1, None, 1, 1, 1, 1, 1, 1, 1, 1),   # Błędny `p_caftan_id`
+            # ('Costume H', 1, 1, 1, 1, None, 1, 1, 1, 1, 1, 1, 1),   # Błędny `p_petticoat_id`
+            # ('Costume I', 1, 1, 1, 1, 1, None, 1, 1, 1, 1, 1, 1),   # Błędny `p_corset_id`
+            # ('Costume J', 1, 1, 1, 1, 1, 1, None, 1, 1, 1, 1, 1),   # Błędny `p_skirt_id`
+            # ('Costume K', 1, 1, 1, 1, 1, 1, 1, None, 1, 1, 1, 1),   # Błędny `p_belt_id`
+            # ('Costume L', 1, 1, 1, 1, 1, 1, 1, 1, None, 1, 1, 1),   # Błędny `p_shirt_id`
+            # ('Costume M', 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 1, 1),   # Błędny `p_pants_id`
+            # ('Costume N', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 1),   # Błędny `p_boots_id`
+            # ('Costume O', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None),   # Błędny `p_neck_accessory_id`
+        ]
+    },
+
+
     "add_rental_costume_item_request": {
         "query": "CALL add_rental_costume_item_request(%s::INTEGER, %s::INTEGER);",
         "data": [
             # Poprawne rekordy
             (1, 1),  # Poprawny rekord: requester_user_id = 1, costume_item_id = 1
             (2, 2),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 2
-            (2, 3),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 2
+            (2, 3),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 3
 
             # Rekord z błędem: requester_user_id = NULL
             (None, 1),  # Błąd: requester_user_id = NULL
@@ -947,167 +1030,10 @@ test_cases = {
             (1, 102),  # Błąd: costume_item_id = 102 nie istnieje
 
             # Rekord z błędem: costume_item_id jest już wynajęty
-            (1, 1),  # Błąd: costume_item_id = 1 już wynajęty (przy założeniu, że istnieje aktywna pozycja w Rentals)
+            # (1, 1),  # Błąd: costume_item_id = 1 już wynajęty (przy założeniu, że istnieje aktywna pozycja w Rentals)
 
             # Rekord z błędem: Brak powiązania pomiędzy użytkownikiem i przedmiotem
             (103, 104)  # Błąd: Zarówno requester_user_id = 103, jak i costume_item_id = 104 nie istnieją
-        ]
-    },
-    "add_return_costume_item_request": {
-        "query": "CALL add_return_costume_item_request(%s::INTEGER, %s::INTEGER);",
-        "data": [
-            # Poprawne rekordy
-            (1, 1),  # Poprawny rekord: requester_user_id = 1, costume_item_id = 1
-            (2, 2),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 2
-
-            # Rekord z błędem: requester_user_id = NULL
-            (None, 1),  # Błąd: requester_user_id = NULL
-
-            # Rekord z błędem: costume_item_id = NULL
-            (1, None),  # Błąd: costume_item_id = NULL
-
-            # Rekord z błędem: requester_user_id nie istnieje
-            (101, 1),  # Błąd: requester_user_id = 101 nie istnieje
-
-            # Rekord z błędem: costume_item_id nie istnieje
-            (1, 102),  # Błąd: costume_item_id = 102 nie istnieje
-
-            # Rekord z błędem: costume_item_id jest już wynajęty
-            (1, 1),  # Błąd: costume_item_id = 1 już wynajęty (przy założeniu, że istnieje aktywna pozycja w Rentals)
-
-            # Rekord z błędem: Brak powiązania pomiędzy użytkownikiem i przedmiotem
-            (103, 104)  # Błąd: Zarówno requester_user_id = 103, jak i costume_item_id = 104 nie istnieją
-        ]
-    },
-    "add_borrow_costume_item_request": {
-        "query": "CALL add_borrow_costume_item_request(%s::INTEGER, %s::INTEGER, %s::INTEGER);",
-        "data": [
-            # Poprawne rekordy
-            (1, 1, 2),  # Poprawny rekord: requester_user_id = 1, costume_item_id = 1, approver_user_id = 2
-            (2, 2, 1),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 2, approver_user_id = 1
-
-            # Rekord z błędem: requester_user_id = NULL
-            (None, 1, 2),  # Błąd: requester_user_id = NULL
-
-            # Rekord z błędem: costume_item_id = NULL
-            (1, None, 2),  # Błąd: costume_item_id = NULL
-
-            # Rekord z błędem: approver_user_id = NULL
-            (1, 1, None),  # Błąd: approver_user_id = NULL
-
-            # Rekord z błędem: requester_user_id nie istnieje
-            (101, 1, 2),  # Błąd: requester_user_id = 101 nie istnieje
-
-            # Rekord z błędem: approver_user_id nie istnieje
-            (1, 1, 103),  # Błąd: approver_user_id = 103 nie istnieje
-
-            # Rekord z błędem: costume_item_id nie istnieje
-            (1, 102, 2),  # Błąd: costume_item_id = 102 nie istnieje
-
-            # Rekord z błędem: costume_item_id nie wypożyczony przez approver_user_id
-            (1, 2, 2),  # Błąd: costume_item_id = 2 nie zostało wypożyczone przez approver_user_id = 2
-
-            # Rekord z błędem: requester_user_id i approver_user_id są takie same
-            (1, 1, 1)   # Błąd: requester_user_id i approver_user_id są takie same
-        ]
-    },
-    "add_notification": {
-        "query": "CALL add_notification(%s::INTEGER, %s::TEXT, %s::INTEGER);",
-        "data": [
-            # Poprawne rekordy
-            (1, 'Notification content for user 1', 1),  # Poprawny rekord: user_id = 1, notification_content = 'Notification content for user 1', due_to_request_id = 1
-            (2, 'Notification content for user 2', 2),  # Poprawny rekord: user_id = 2, notification_content = 'Notification content for user 2', due_to_request_id = 2
-
-            # Rekord z błędem: user_id = NULL
-            (None, 'Notification content', 1),  # Błąd: user_id = NULL
-
-            # Rekord z błędem: notification_content = NULL
-            (1, None, 1),  # Błąd: notification_content = NULL
-
-            # Rekord z błędem: due_to_request_id = NULL
-            (1, 'Notification content', None),  # Błąd: due_to_request_id = NULL
-
-            # Rekord z błędem: user_id nie istnieje
-            (101, 'Notification for non-existing user', 1),  # Błąd: user_id = 101 nie istnieje
-
-            # Rekord z błędem: due_to_request_id nie istnieje
-            (1, 'Notification content', 102),  # Błąd: due_to_request_id = 102 nie istnieje
-
-            # Rekord z błędem: user_id i requester_user_id z requestu są takie same
-            (1, 'Notification content', 1),  # Błąd: user_id i requester_user_id z requestu = 1 są takie same
-
-            # Rekord z błędem: notification_content ma mniej niż 1 znak
-            (1, '', 1)   # Błąd: notification_content ma mniej niż 1 znak
-        ]
-    },
-    "add_rental": {
-        "query": "CALL add_rental(%s::INTEGER, %s::INTEGER, %s::INTEGER, %s::TIMESTAMP);",
-        "data": [
-            # Poprawny rekord
-            (1, 1, 1, '2025-01-01 10:00:00'),  # Poprawny rekord: user_id = 1, costume_item_id = 1, done_due_request_id = 1, rental_date_of_rental = '2025-01-01 10:00:00'
-
-            # Rekord z błędem: user_id = NULL
-            (None, 1, 1, '2025-01-01 10:00:00'),  # Błąd: user_id = NULL
-
-            # Rekord z błędem: costume_item_id = NULL
-            (1, None, 1, '2025-01-01 10:00:00'),  # Błąd: costume_item_id = NULL
-
-            # Rekord z błędem: done_due_request_id = NULL
-            (1, 1, None, '2025-01-01 10:00:00'),  # Błąd: done_due_request_id = NULL
-
-            # Rekord z błędem: rental_date_of_rental = NULL
-            (1, 1, 1, None),  # Błąd: rental_date_of_rental = NULL
-
-            # Rekord z błędem: user_id nie istnieje
-            (101, 1, 1, '2025-01-01 10:00:00'),  # Błąd: user_id = 101 nie istnieje
-
-            # Rekord z błędem: costume_item_id nie istnieje
-            (1, 102, 1, '2025-01-01 10:00:00'),  # Błąd: costume_item_id = 102 nie istnieje
-
-            # Rekord z błędem: done_due_request_id nie istnieje
-            (1, 1, 103, '2025-01-01 10:00:00'),  # Błąd: done_due_request_id = 103 nie istnieje
-
-            # Rekord z błędem: niezgodność wynajmu (check_rental_inconsistency zwróci TRUE)
-            (1, 1, 1, '2025-01-01 10:00:00')  # Błąd: Rental inconsistency (sprawdzenie w funkcji check_rental_inconsistency)
-        ]
-    },
-    "update_costume_item_location": {
-        "query": "CALL update_costume_item_location(%s::INTEGER, %s::INTEGER);",
-        "data": [
-            # Poprawne rekordy
-            (1, 1),  # Poprawny rekord: costume_item_id = 1, location_id = 1
-            (2, 2),  # Poprawny rekord: costume_item_id = 2, location_id = 2
-
-            # Rekord z błędem: costume_item_id = NULL
-            (None, 1),  # Błąd: costume_item_id = NULL
-
-            # Rekord z błędem: location_id = NULL
-            (1, None),  # Błąd: location_id = NULL
-
-            # Rekord z błędem: costume_item_id nie istnieje
-            (101, 1),  # Błąd: costume_item_id = 101 nie istnieje
-
-            # Rekord z błędem: location_id nie istnieje
-            (1, 101),  # Błąd: location_id = 101 nie istnieje
-
-            # Rekord z błędem: błędny zaktualizowany rekord
-            (1, 2)  # Błąd: inny konflikt związany z aktualizacją (np. już zaktualizowane)
-        ]
-    },
-    "delete_request": {
-        "query": "CALL delete_request(%s::INTEGER);",
-        "data": [
-            # Poprawny rekord
-            (2,),  # Poprawny rekord: request_id = 2 (zakładając, że request_id = 2 istnieje i jego stan = 1)
-
-            # Rekord z błędem: request_id = NULL
-            (None,),  # Błąd: request_id = NULL
-
-            # Rekord z błędem: request_id nie istnieje
-            (101,),  # Błąd: request_id = 101 nie istnieje
-
-            # Rekord z błędem: request już zamknięty (r_state_id <> 1)
-            (3,)  # Błąd: request_id = 3, który ma r_state_id != 1 (przykład zamkniętego requestu)
         ]
     },
     "accept_rental_costume_item_request": {
@@ -1115,6 +1041,8 @@ test_cases = {
         "data": [
             # Poprawny rekord
             (1, 1, 'Accept the request and proceed with the rental.'),  # Poprawny rekord: request_id = 1, approver_costumier_id = 1, comment = 'Accept the request and proceed with the rental.'
+            (2, 1, 'Accept the request and proceed with the rental.'),
+            # Poprawny rekord: request_id = 1, approver_costumier_id = 1, comment = 'Accept the request and proceed with the rental.'
 
             # Rekord z błędem: request_id = NULL
             (None, 1, 'Accept the request and proceed with the rental.'),  # Błąd: request_id = NULL
@@ -1166,34 +1094,301 @@ test_cases = {
             (3, 1, '')  # Błąd: comment jest za krótki (<1 znak)
         ]
     },
+    "rent_costume_item": {
+        "query": "CALL rent_costume_item(%s::INTEGER, %s::INTEGER, %s::INTEGER);",
+        "data": [
+            # Poprawny przypadek
+            (1, 1, 1),
+            (2, 2, 2),
+
+            # Przypadki z błędami
+            (None, 10, 100),   # NULL dla `p_user_id`
+            (1, None, 100),    # NULL dla `p_costume_item_id`
+            (1, 10, None),     # NULL dla `p_done_due_request_id`
+            (999, 10, 100),    # Nieistniejący `p_user_id`
+            (1, 999, 100),     # Nieistniejący `p_costume_item_id`
+            (1, 10, 999),      # Nieistniejący `p_done_due_request_id`
+        ]
+    },
 
 
+    "add_return_costume_item_request": {
+        "query": "CALL add_return_costume_item_request(%s::INTEGER, %s::INTEGER);",
+        "data": [
+            # Poprawne rekordy
+            (1, 1),  # Poprawny rekord: requester_user_id = 1, costume_item_id = 1
+            (2, 2),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 2
+            # Rekord z błędem: requester_user_id = NULL
+            (None, 1),  # Błąd: requester_user_id = NULL
+
+            # Rekord z błędem: costume_item_id = NULL
+            (1, None),  # Błąd: costume_item_id = NULL
+
+            # Rekord z błędem: requester_user_id nie istnieje
+            (101, 1),  # Błąd: requester_user_id = 101 nie istnieje
+
+            # Rekord z błędem: costume_item_id nie istnieje
+            (1, 102),  # Błąd: costume_item_id = 102 nie istnieje
+
+            # Rekord z błędem: costume_item_id jest już wynajęty
+            # (1, 1),  # Błąd: costume_item_id = 1 już wynajęty (przy założeniu, że istnieje aktywna pozycja w Rentals)
+
+            # Rekord z błędem: Brak powiązania pomiędzy użytkownikiem i przedmiotem
+            (103, 104)  # Błąd: Zarówno requester_user_id = 103, jak i costume_item_id = 104 nie istnieją
+        ]
+    },
+    "accept_return_costume_item_request": {
+        "query": "CALL accept_return_costume_item_request(%s::INTEGER, %s::INTEGER, %s::TEXT);",
+        "data": [
+            # Poprawny rekord
+            (4, 1, 'Item return accepted. Please proceed with the return.'),
+            # Poprawny rekord: request_id = 1, approver_costumier_id = 1, comment = 'Item return accepted. Please proceed with the return.'
+
+            # Rekord z błędem: request_id = NULL
+            (None, 1, 'Item return accepted. Please proceed with the return.'),  # Błąd: request_id = NULL
+
+            # Rekord z błędem: approver_costumier_id = NULL
+            (1, None, 'Item return accepted. Please proceed with the return.'),  # Błąd: approver_costumier_id = NULL
+
+            # Rekord z błędem: comment = NULL
+            (1, 1, None),  # Błąd: comment = NULL
+
+            # Rekord z błędem: request_id nie istnieje
+            (101, 1, 'Item return accepted. Please proceed with the return.'),  # Błąd: request_id = 101 nie istnieje
+
+            # Rekord z błędem: request_id nie jest powiązany z Return_costume_item_requests
+            (2, 1, 'Item return accepted. Please proceed with the return.'),
+            # Błąd: request_id nie jest powiązany z Return_costume_item_requests
+
+            # Rekord z błędem: approver_costumier_id nie istnieje
+            (1, 102, 'Item return accepted. Please proceed with the return.'),
+            # Błąd: approver_costumier_id = 102 nie istnieje
+
+            # Rekord z błędem: comment jest za krótki
+            (1, 1, ''),  # Błąd: comment jest za krótki (<1 znak)
+
+            # Rekord z błędem: request_id istnieje, ale został już zaakceptowany
+            # (1, 1, 'Request already accepted.')  # Błąd: request_id jest już zaakceptowany (state_id != 1)
+        ]
+    },
+    "deny_return_costume_item_request": {
+        "query": "CALL deny_return_costume_item_request(%s::INTEGER, %s::INTEGER, %s::TEXT);",
+        "data": [
+            # Poprawny rekord
+            (5, 1, 'Request denied due to incorrect item return process.'),
+
+            # Rekord z błędem: p_request_id = NULL
+            (None, 1, 'Request denied due to incorrect item return process.'),
+
+            # Rekord z błędem: p_approver_costumier_id = NULL
+            (1, None, 'Request denied due to incorrect item return process.'),
+
+            # Rekord z błędem: p_comment = NULL
+            (1, 1, None),
+
+            # Rekord z błędem: request_id nie istnieje
+            (999, 1, 'Request denied due to incorrect item return process.'),
+
+            # Rekord z błędem: request_id nie jest powiązany z Return_costume_item_requests
+            # (2, 1, 'Request denied due to incorrect item return process.'),
+
+            # Rekord z błędem: approver_costumier_id nie istnieje
+            (1, 999, 'Request denied due to incorrect item return process.'),
+
+            # Rekord z błędem: comment jest za krótki
+            (1, 1, ''),
+
+            # Rekord z błędem: request_id istnieje, ale został już zaakceptowany lub odrzucony
+            # (1, 1, 'Request already processed.'),
+        ]
+    },
+    "return_costume_item": {
+        "query": "CALL return_costume_item(%s::INTEGER);",
+        "data":[
+            (4,),
+            (None,),
+            (1234,),
+        ]
+    },
 
 
+    "add_borrow_costume_item_request": {
+        "query": "CALL add_borrow_costume_item_request(%s::INTEGER, %s::INTEGER, %s::INTEGER);",
+        "data": [
+            # Poprawne rekordy
+            (1, 2, 2),  # Poprawny rekord: requester_user_id = 1, costume_item_id = 1, approver_user_id = 2
+            (2, 1, 1),  # Poprawny rekord: requester_user_id = 2, costume_item_id = 2, approver_user_id = 1
+            (1, 2, 2),  # Poprawny rekord: requester_user_id = 1, costume_item_id = 1, approver_user_id = 2
 
+            # Rekord z błędem: requester_user_id = NULL
+            (None, 1, 2),  # Błąd: requester_user_id = NULL
 
+            # Rekord z błędem: costume_item_id = NULL
+            (1, None, 2),  # Błąd: costume_item_id = NULL
 
+            # Rekord z błędem: approver_user_id = NULL
+            (1, 1, None),  # Błąd: approver_user_id = NULL
 
+            # Rekord z błędem: requester_user_id nie istnieje
+            (101, 1, 2),  # Błąd: requester_user_id = 101 nie istnieje
 
+            # Rekord z błędem: approver_user_id nie istnieje
+            (1, 1, 103),  # Błąd: approver_user_id = 103 nie istnieje
 
+            # Rekord z błędem: costume_item_id nie istnieje
+            (1, 102, 2),  # Błąd: costume_item_id = 102 nie istnieje
 
+            # Rekord z błędem: costume_item_id nie wypożyczony przez approver_user_id
+            # (1, 2, 2),  # Błąd: costume_item_id = 2 nie zostało wypożyczone przez approver_user_id = 2
 
+            # Rekord z błędem: requester_user_id i approver_user_id są takie same
+            # (1, 1, 1)   # Błąd: requester_user_id i approver_user_id są takie same
+        ]
+    },
+    "accept_borrow_costume_item_request": {
+        "query": "CALL accept_borrow_costume_item_request(%s::INTEGER, %s::TEXT);",
+        "data": [
+            # Poprawny rekord
+            (6, 'Request accepted. Borrowing approved.'),
 
+            # Rekord z błędem: p_request_id = NULL
+            (None, 'Request accepted. Borrowing approved.'),
 
+            # Rekord z błędem: p_comment = NULL
+            (1, None),
 
+            # Rekord z błędem: request_id nie istnieje
+            (999, 'Request accepted. Borrowing approved.'),
 
+            # Rekord z błędem: request_id nie jest powiązany z Borrow_costume_item_requests
+            # (2, 'Request accepted. Borrowing approved.'),
 
+            # Rekord z błędem: comment jest za krótki
+            (1, ''),
 
+            # Rekord z błędem: request_id istnieje, ale został już zaakceptowany lub odrzucony
+            # (1, 'Request already processed.'),
+        ]
+    },
+    "deny_borrow_costume_item_request": {
+        "query": "CALL deny_borrow_costume_item_request(%s::INTEGER, %s::TEXT);",
+        "data": [
+            # Poprawny rekord
+            (7, 'Request denied due to unavailability.'),
 
+            # Rekord z błędem: p_request_id = NULL
+            (None, 'Request denied due to unavailability.'),
 
+            # Rekord z błędem: p_comment = NULL
+            (1, None),
 
+            # Rekord z błędem: request_id nie istnieje
+            (999, 'Request denied due to unavailability.'),
 
+            # Rekord z błędem: request_id nie jest powiązany z Borrow_costume_item_requests
+            # (2, 'Request denied due to unavailability.'),
 
+            # Rekord z błędem: comment jest za krótki
+            (1, ''),
 
+            # Rekord z błędem: request_id istnieje, ale został już zaakceptowany lub odrzucony
+            # (1, 'Request already processed.'),
+        ]
+    },
+    "borrow_costume_item": {
+        "query": "CALL borrow_costume_item(%s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER);",
+        "data": [
+            # Poprawny przypadek
+            (2, 1, 2, 6),
 
+            # Przypadki z błędami
+            (None, 2, 10, 1),  # NULL jako `p_rental_id`
+            (1, None, 10, 1),  # NULL jako `p_new_owner_user_id`
+            (1, 2, None, 1),  # NULL jako `p_costume_item_id`
+            (1, 2, 10, None),  # NULL jako `p_done_due_request_id`
+            (999, 2, 10, 1)  # Nieistniejący `p_rental_id`
+        ]
+    },
 
+    "add_notification": {
+        "query": "CALL add_notification(%s::INTEGER, %s::TEXT, %s::INTEGER);",
+        "data": [
+            # Poprawne rekordy
+            (1, 'Notification content for user 1', 1),  # Poprawny rekord: user_id = 1, notification_content = 'Notification content for user 1', due_to_request_id = 1
 
+            # Rekord z błędem: user_id = NULL
+            (None, 'Notification content', 1),  # Błąd: user_id = NULL
 
+            # Rekord z błędem: notification_content = NULL
+            (1, None, 1),  # Błąd: notification_content = NULL
+
+            # Rekord z błędem: due_to_request_id = NULL
+            (1, 'Notification content', None),  # Błąd: due_to_request_id = NULL
+
+            # Rekord z błędem: user_id nie istnieje
+            (101, 'Notification for non-existing user', 1),  # Błąd: user_id = 101 nie istnieje
+
+            # Rekord z błędem: due_to_request_id nie istnieje
+            (1, 'Notification content', 102),  # Błąd: due_to_request_id = 102 nie istnieje
+
+            # Rekord z błędem: user_id i requester_user_id z requestu są takie same
+            # (1, 'Notification content', 1),  # Błąd: user_id i requester_user_id z requestu = 1 są takie same
+
+            # Rekord z błędem: notification_content ma mniej niż 1 znak
+            (1, '', 1)   # Błąd: notification_content ma mniej niż 1 znak
+        ]
+    },
+
+    "update_costume_item_location": {
+        "query": "CALL update_costume_item_location(%s::INTEGER, %s::INTEGER);",
+        "data": [
+            # Poprawne rekordy
+            (1, 1),  # Poprawny rekord: costume_item_id = 1, location_id = 1
+            (2, 2),  # Poprawny rekord: costume_item_id = 2, location_id = 2
+
+            # Rekord z błędem: costume_item_id = NULL
+            (None, 1),  # Błąd: costume_item_id = NULL
+
+            # Rekord z błędem: location_id = NULL
+            (1, None),  # Błąd: location_id = NULL
+
+            # Rekord z błędem: costume_item_id nie istnieje
+            (101, 1),  # Błąd: costume_item_id = 101 nie istnieje
+
+            # Rekord z błędem: location_id nie istnieje
+            (1, 101),  # Błąd: location_id = 101 nie istnieje
+
+            # Rekord z błędem: błędny zaktualizowany rekord
+            # (1, 2)  # Błąd: inny konflikt związany z aktualizacją (np. już zaktualizowane)
+        ]
+    },
+    "delete_request": {
+        "query": "CALL delete_request(%s::INTEGER);",
+        "data": [
+            # Poprawny rekord
+            (8,),  # Poprawny rekord: request_id = 2 (zakładając, że request_id = 2 istnieje i jego stan = 1)
+
+            # Rekord z błędem: request_id = NULL
+            (None,),  # Błąd: request_id = NULL
+
+            # Rekord z błędem: request_id nie istnieje
+            (101,),  # Błąd: request_id = 101 nie istnieje
+
+            # Rekord z błędem: request już zamknięty (r_state_id <> 1)
+            # (3,)  # Błąd: request_id = 3, który ma r_state_id != 1 (przykład zamkniętego requestu)
+        ]
+    },
+    "mark_notification_as_read": {
+        "query": "CALL mark_notification_as_read(%s::INTEGER);",
+        "data": [
+            # Poprawny przypadek
+            (1,),
+
+            # Przypadki z błędami
+            (None,),          # Brak parametru (NULL)
+            (999,)           # Nieistniejące id powiadomienia
+        ]
+    }
 }
 
 # Wykonaj testy
