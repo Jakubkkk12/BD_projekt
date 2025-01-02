@@ -19,129 +19,17 @@ DECLARE
 BEGIN
     IF f_apron_id IS NOT NULL THEN
         PERFORM 1
-        FROM Aprons
-        WHERE costume_item_id = f_apron_id AND (collection_id = f_collection_id OR collection_id = 1);
+        FROM Costumes_items
+        WHERE id = f_apron_id AND (collection_id = f_collection_id OR collection_id = 1);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Apron does not match collection % or is not universal', f_collection_id;
             inconsistency_found := TRUE;
         END IF;
-    END IF;
-
-    IF f_belt_id IS NOT NULL THEN
+    
         PERFORM 1
-        FROM Belts
-        WHERE costume_item_id = f_belt_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Belt does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-    IF f_boots_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Boots
-        WHERE costume_item_id = f_boots_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Boots do not match collection % or are not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-    IF f_caftan_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Caftans
-        WHERE costume_item_id = f_caftan_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Caftan does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-    IF f_corset_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Corsets
-        WHERE costume_item_id = f_corset_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Corset does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-	IF f_petticoat_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Petticoats
-        WHERE costume_item_id = f_petticoat_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Petticoat does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-	IF f_skirt_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Skirts
-        WHERE costume_item_id = f_skirt_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Skirt does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-	IF f_shirt_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Shirts
-        WHERE costume_item_id = f_shirt_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Shirt does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-	IF f_pants_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Pants
-        WHERE costume_item_id = f_pants_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Pants does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-	IF f_neck_accessory_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Neck_accessories
-        WHERE costume_item_id = f_neck_accessory_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Neck accessory does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-	IF f_head_accessory_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Head_accessories
-        WHERE costume_item_id = f_head_accessory_id AND (collection_id = f_collection_id OR collection_id = 1);
-
-        IF NOT FOUND THEN
-            RAISE NOTICE 'Head accessory does not match collection % or is not universal', f_collection_id;
-            inconsistency_found := TRUE;
-        END IF;
-    END IF;
-
-    IF f_apron_id IS NOT NULL THEN
-        PERFORM 1
-        FROM Aprons
-        WHERE costume_item_id = f_apron_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_apron_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Apron does not match gender % or is not bigender', f_gender_id;
@@ -151,8 +39,17 @@ BEGIN
 
     IF f_belt_id IS NOT NULL THEN
         PERFORM 1
-        FROM Belts
-        WHERE costume_item_id = f_belt_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_belt_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Belt does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_belt_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Belt does not match gender % or is not bigender', f_gender_id;
@@ -162,8 +59,17 @@ BEGIN
 
     IF f_boots_id IS NOT NULL THEN
         PERFORM 1
-        FROM Boots
-        WHERE costume_item_id = f_boots_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_boots_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Boots do not match collection % or are not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_boots_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Boots do not match gender % or are not bigender', f_gender_id;
@@ -173,8 +79,17 @@ BEGIN
 
     IF f_caftan_id IS NOT NULL THEN
         PERFORM 1
-        FROM Caftans
-        WHERE costume_item_id = f_caftan_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_caftan_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Caftan does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_caftan_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Caftan does not match gender % or is not bigender', f_gender_id;
@@ -184,8 +99,17 @@ BEGIN
 
     IF f_corset_id IS NOT NULL THEN
         PERFORM 1
-        FROM Corsets
-        WHERE costume_item_id = f_corset_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_corset_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Corset does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_corset_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Corset does not match gender % or is not bigender', f_gender_id;
@@ -195,8 +119,17 @@ BEGIN
 
 	IF f_petticoat_id IS NOT NULL THEN
         PERFORM 1
-        FROM Petticoats
-        WHERE costume_item_id = f_petticoat_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_petticoat_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Petticoat does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_petticoat_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Petticoat does not match gender % or is not bigender', f_gender_id;
@@ -206,8 +139,17 @@ BEGIN
 
 	IF f_skirt_id IS NOT NULL THEN
         PERFORM 1
-        FROM Skirts
-        WHERE costume_item_id = f_skirt_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_skirt_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Skirt does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_skirt_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Skirt does not match gender % or is not bigender', f_gender_id;
@@ -217,8 +159,17 @@ BEGIN
 
 	IF f_shirt_id IS NOT NULL THEN
         PERFORM 1
-        FROM Shirts
-        WHERE costume_item_id = f_shirt_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_shirt_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Shirt does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_shirt_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Shirts does not match gender % or is not bigender', f_gender_id;
@@ -228,8 +179,17 @@ BEGIN
 
 	IF f_pants_id IS NOT NULL THEN
         PERFORM 1
-        FROM Pants
-        WHERE costume_item_id = f_pants_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_pants_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Pants does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_pants_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Pants does not match gender % or is not bigender', f_gender_id;
@@ -239,8 +199,17 @@ BEGIN
 
 	IF f_neck_accessory_id IS NOT NULL THEN
         PERFORM 1
-        FROM Neck_accessories
-        WHERE costume_item_id = f_neck_accessory_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_neck_accessory_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Neck accessory does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_neck_accessory_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Neck accessory does not match gender % or is not bigender', f_gender_id;
@@ -250,8 +219,17 @@ BEGIN
 
 	IF f_head_accessory_id IS NOT NULL THEN
         PERFORM 1
-        FROM Head_accessories
-        WHERE costume_item_id = f_head_accessory_id AND (gender_id = f_gender_id OR gender_id = 3);
+        FROM Costumes_items
+        WHERE id = f_head_accessory_id AND (collection_id = f_collection_id OR collection_id = 1);
+
+        IF NOT FOUND THEN
+            RAISE NOTICE 'Head accessory does not match collection % or is not universal', f_collection_id;
+            inconsistency_found := TRUE;
+        END IF;
+
+        PERFORM 1
+        FROM Costumes_items
+        WHERE id = f_head_accessory_id AND (gender_id = f_gender_id OR gender_id = 3);
 
         IF NOT FOUND THEN
             RAISE NOTICE 'Head accessory does not match gender % or is not bigender', f_gender_id;

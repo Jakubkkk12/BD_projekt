@@ -1985,7 +1985,7 @@ BEGIN
 		INSERT INTO Costumes (name, collection_id, gender_id, apron_id, caftan_id, petticoat_id, corset_id, skirt_id,
         belt_id, shirt_id, pants_id, boots_id, neck_accessory_id, head_accessory_id)
 		VALUES (p_costume_name, p_collection_id, p_gender_id, p_apron_id, p_caftan_id, p_petticoat_id, p_corset_id,
-        p_shirt_id, p_belt_id, p_shirt_id, p_pants_id, p_boots_id, p_neck_accessory_id, p_head_accessory_id);
+        p_skirt_id, p_belt_id, p_shirt_id, p_pants_id, p_boots_id, p_neck_accessory_id, p_head_accessory_id);
 	EXCEPTION
 		WHEN OTHERS THEN
 			RAISE EXCEPTION 'Failed to insert: %', SQLERRM;
