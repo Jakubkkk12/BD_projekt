@@ -599,7 +599,7 @@ WHERE marked_as_read = 'F'
 ;
 
 
-CREATE OR REPLACE VIEW Detaild_rental_costume_item_requests ( id, datetime, requester_user_id, state, costume_item_id, approver_costumier_id ) AS
+CREATE OR REPLACE VIEW Detailed_rental_costume_item_requests ( id, datetime, requester_user_id, state, costume_item_id, approver_costumier_id ) AS
 SELECT r.id, r.datetime, r.requester_user_id, s.name AS "state", rr.costume_item_id, rr.approver_costumier_id
 FROM Rental_costume_item_requests rr
 INNER JOIN Requests r
@@ -609,7 +609,7 @@ INNER JOIN States_of_requests s
 ;
 
 
-CREATE OR REPLACE VIEW Detaild_return_costume_item_requests ( id, datetime, requester_user_id, state, costume_item_id, approver_costumier_id ) AS
+CREATE OR REPLACE VIEW Detailed_return_costume_item_requests ( id, datetime, requester_user_id, state, costume_item_id, approver_costumier_id ) AS
 SELECT r.id, r.datetime, r.requester_user_id, s.name AS "state", rr.costume_item_id, rr.approver_costumier_id
 FROM Return_costume_item_requests rr
 INNER JOIN Requests r
@@ -619,7 +619,7 @@ INNER JOIN States_of_requests s
 ;
 
 
-CREATE OR REPLACE VIEW Detaild_borrow_costume_item_requests ( id, datetime, requester_user_id, state, costume_item_id, approver_user_id ) AS
+CREATE OR REPLACE VIEW Detailed_borrow_costume_item_requests ( id, datetime, requester_user_id, state, costume_item_id, approver_user_id ) AS
 SELECT r.id, r.datetime, r.requester_user_id, s.name AS "state", rr.costume_item_id, rr.approver_user_id
 FROM Borrow_costume_item_requests rr
 INNER JOIN Requests r
@@ -629,15 +629,15 @@ INNER JOIN States_of_requests s
 ;
 
 
-CREATE OR REPLACE VIEW Detaild_costume_item_requests ( id, datetime, type, requester_user_id, state, costume_item_id, approver_id ) AS
+CREATE OR REPLACE VIEW Detailed_costume_item_requests ( id, datetime, type, requester_user_id, state, costume_item_id, approver_id ) AS
 (SELECT d.id, d.datetime, 'RENTAL' AS "type", d.requester_user_id, d.state, d.costume_item_id, d.approver_costumier_id
-FROM Detaild_rental_costume_item_requests d)
+FROM Detailed_rental_costume_item_requests d)
 UNION
 (SELECT d.id, d.datetime, 'RETURN' AS "type", d.requester_user_id, d.state, d.costume_item_id, d.approver_costumier_id
-FROM Detaild_return_costume_item_requests d)
+FROM Detailed_return_costume_item_requests d)
 UNION
 (SELECT d.id, d.datetime, 'BORROW' AS "type", d.requester_user_id, d.state, d.costume_item_id, d.approver_user_id
-FROM Detaild_borrow_costume_item_requests d)
+FROM Detailed_borrow_costume_item_requests d)
 ;
 
 

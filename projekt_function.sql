@@ -77,7 +77,7 @@ BEGIN
     RETURN QUERY
     SELECT * FROM ((SELECT r.id, r.state, r.datetime, r.requester_user_id, u.first_name, u.last_name, r.costume_item_id, ci.name
     FROM
-        Detaild_rental_costume_item_requests r
+        Detailed_rental_costume_item_requests r
     INNER JOIN 
         Users u
         ON r.requester_user_id = u.id
@@ -89,7 +89,7 @@ BEGIN
     UNION
     (SELECT r.id, r.state, r.datetime, r.requester_user_id, u.first_name, u.last_name, r.costume_item_id, ci.name
     FROM
-        Detaild_return_costume_item_requests r
+        Detailed_return_costume_item_requests r
     INNER JOIN 
         Users u
         ON r.requester_user_id = u.id
@@ -131,7 +131,7 @@ BEGIN
         r.costume_item_id, 
         ci.name
     FROM
-        Detaild_borrow_costume_item_requests r
+        Detailed_borrow_costume_item_requests r
     INNER JOIN 
         Users u
         ON r.requester_user_id = u.id
@@ -700,7 +700,7 @@ BEGIN
         d.costume_item_id,
         d.approver_id
     FROM 
-        Detaild_costume_item_requests d
+        Detailed_costume_item_requests d
     WHERE 
         d.requester_user_id = f_user_id;
 END;
