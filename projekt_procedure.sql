@@ -2027,10 +2027,26 @@ BEGIN
 
     PERFORM 1
     FROM Rentals
-    WHERE costume_item_id = p_costume_item_id AND date_of_return IS NULL;
+    WHERE 
+        costume_item_id = p_costume_item_id AND date_of_return IS NULL;
 
     IF FOUND THEN
         RAISE EXCEPTION 'Costume item with id % is already rented', p_costume_item_id;
+    END IF;
+
+    PERFORM 1 
+    FROM Requests r
+    INNER JOIN Rental_costume_item_requests rr
+        ON rr.request_id = r.id
+    WHERE 
+        (r.state_id <> 2 AND r.state_id <> 3)
+        AND
+        r.requester_user_id = p_requester_user_id
+        AND
+        rr.costume_item_id = p_costume_item_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'You have already submitted a request to rent a costume item with id %', p_costume_item_id;
     END IF;
 	
 	BEGIN
@@ -2081,10 +2097,26 @@ BEGIN
 
     PERFORM 1
     FROM Rentals
-    WHERE user_id = p_requester_user_id AND costume_item_id = p_costume_item_id AND date_of_return IS NULL;
+    WHERE 
+        user_id = p_requester_user_id AND costume_item_id = p_costume_item_id AND date_of_return IS NULL;
 
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Costume item is not rented';
+    END IF;
+
+    PERFORM 1 
+    FROM Requests r
+    INNER JOIN Return_costume_item_requests rr
+        ON rr.request_id = r.id
+    WHERE 
+        (r.state_id <> 2 AND r.state_id <> 3)
+        AND
+        r.requester_user_id = p_requester_user_id
+        AND
+        rr.costume_item_id = p_costume_item_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'You have already submitted a request to return a costume item with id %', p_costume_item_id;
     END IF;
 	
 	BEGIN
@@ -2155,6 +2187,23 @@ BEGIN
 
     IF p_requester_user_id = p_approver_user_id THEN
         RAISE EXCEPTION 'Requester user id and approver user id are the same';
+    END IF;
+
+    PERFORM 1 
+    FROM Requests r
+    INNER JOIN Borrow_costume_item_requests rr
+        ON rr.request_id = r.id
+    WHERE 
+        (r.state_id <> 2 AND r.state_id <> 3)
+        AND
+        r.requester_user_id = p_requester_user_id
+        AND
+        rr.costume_item_id = p_costume_item_id
+        AND 
+        rr.approver_user_id = p_approver_user_id;
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'You have already submitted a request to borrow a costume item with id % from user with id %', p_costume_item_id, p_approver_user_id;
     END IF;
 	
 	BEGIN
