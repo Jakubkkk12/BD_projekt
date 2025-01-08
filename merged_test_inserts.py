@@ -9,10 +9,10 @@ def run_tests(connection, query, data):
             try:
                 cursor.execute(query, record)
                 connection.commit()
-                results.append((i + 1, "SUCCESS", None))
+                results.append((i + 1, "RECORD ADDED: "))
             except psycopg2.Error as e:
                 connection.rollback()
-                results.append((i + 1, "FAILURE", str(e)))
+                results.append((i + 1, "NOT ADDEDD DUE TO: ", str(e)))
     return results
 
 # Połączenie z bazą danych
@@ -173,7 +173,7 @@ test_cases = {
         ]
     },
     "add_head_accessory_category": {
-        "query": "CALL add_head_accessory_category(%s::VARCHAR(20));",
+        "query": "CALL add_head_accessory_category(%s::VARCHAR);",
         "data": [
             ("Hat", ), # Poprawny rekord - Przykład dla kategorii "Hat"
             ("Cap",  ),# Poprawny rekord - Przykład dla kategorii "Cap"
@@ -192,7 +192,7 @@ test_cases = {
         ]
     },
     "add_state_of_request": {
-        "query": "CALL add_state_of_request(%s::VARCHAR(15));",
+        "query": "CALL add_state_of_request(%s::VARCHAR);",
         "data": [
             ("New",),  # Poprawny rekord - Przykład dla stanu "New"
             ("In Progress",),  # Poprawny rekord - Przykład dla stanu "In Progress"
@@ -288,7 +288,7 @@ test_cases = {
         ]
     },
     "add_apron": {
-    "query": "CALL add_apron(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+    "query": "CALL add_apron(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
     "data": [
         ("Apron1", 1, 1, 1, 1, 10, 1),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
         ("Apron2", 2, 2, 2, 2, 12, 3),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -319,7 +319,7 @@ test_cases = {
         ]
     },
     "add_head_accessory": {
-        "query": "CALL add_head_accessory(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_head_accessory(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("HeadAccessory1", 1, 1, 1, 1, 55, 1),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1, Head Circumference 55, Category 1
             ("HeadAccessory2", 2, 2, 2, 2, 58, 2),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2, Head Circumference 58, Category 2
@@ -353,7 +353,7 @@ test_cases = {
         ]
     },
     "add_caftan": {
-        "query": "CALL add_caftan(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_caftan(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("Caftan1", 1, 1, 1, 1, 100, 70, 90, 80, 100),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Caftan2", 2, 2, 2, 2, 110, 75, 95, 85, 105),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -393,7 +393,7 @@ test_cases = {
         ]
     },
     "add_petticoat": {
-        "query": "CALL add_petticoat(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_petticoat(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("Petticoat1", 1, 1, 1, 1, 100, 70, 90),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Petticoat2", 2, 2, 2, 2, 110, 75, 95),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -433,7 +433,7 @@ test_cases = {
         ]
     },
     "add_corset": {
-        "query": "CALL add_corset(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_corset(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("Corset1", 1, 1, 1, 1, 100, 70, 90, 80, 100),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Corset2", 2, 2, 2, 2, 110, 75, 95, 85, 105),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -473,7 +473,7 @@ test_cases = {
         ]
     },
     "add_skirt": {
-        "query": "CALL add_skirt(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_skirt(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("Skirt1", 1, 1, 1, 1, 100, 70, 90),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Skirt2", 2, 2, 2, 2, 110, 75, 95),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -513,7 +513,7 @@ test_cases = {
         ]
     },
     "add_belt": {
-        "query": "CALL add_belt(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_belt(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("Belt1", 1, 1, 1, 1, 70, 90),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Belt2", 2, 2, 2, 2, 75, 95),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -550,7 +550,7 @@ test_cases = {
         ]
     },
     "add_shirt": {
-        "query": "CALL add_shirt(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT );",
+        "query": "CALL add_shirt(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT );",
         "data": [
             ("Shirt1", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Shirt2", 2, 2, 2, 2, 75, 65, 75, 95, 42, 47, 36, 40),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -589,14 +589,14 @@ test_cases = {
             ("Shirt12", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 30, 29),  # Błąd: p_shirt_max_neck_circumference < p_shirt_min_neck_circumference
 
             # Rekord z błędem: Zbyt długa nazwa p_shirt_name
-            ("Sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Nazwa shirt ma więcej niż 30 znaków
+            ("S"+"s"*31, 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40),  # Błąd: Nazwa shirt ma więcej niż 30 znaków
 
             # Rekord z błędem: Shirt o tej nazwie już istnieje
             ("Shirt1", 2, 1, 1, 1, 70, 60, 70, 90, 40, 45, 35, 40)   # Błąd: Shirt o nazwie "Shirt1" już istnieje
         ]
     },
     "add_pants": {
-        "query": "CALL add_pants(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_pants(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("Pants1", 1, 1, 1, 1, 100, 70, 90),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1
             ("Pants2", 2, 2, 2, 2, 105, 75, 95),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2
@@ -636,7 +636,7 @@ test_cases = {
         ]
     },
     "add_boots": {
-        "query": "CALL add_boots(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::FLOAT);",
+        "query": "CALL add_boots(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::FLOAT);",
         "data": [
             ("Boots1", 1, 1, 1, 1, 42.5),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1, rozmiar 42.5
             ("Boots2", 2, 2, 2, 2, 38),    # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2, rozmiar 38
@@ -667,7 +667,7 @@ test_cases = {
         ]
     },
     "add_neck_accessory": {
-        "query": "CALL add_neck_accessory(%s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL add_neck_accessory(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             ("NeckAccessory1", 1, 1, 1, 1, 30, 40),  # Poprawny rekord - Przykład dla Collection 1, Gender male, Color Red, Location ulica1, min/max waist circumference 30-40
             ("NeckAccessory2", 2, 2, 2, 2, 25, 35),  # Poprawny rekord - Przykład dla Collection 2, Gender female, Color Blue, Location ulica2, min/max waist circumference 25-35
@@ -701,7 +701,7 @@ test_cases = {
         ]
     },
     "update_apron": {
-        "query": "CALL update_apron(%s::INT, %s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL update_apron(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             # Poprawne rekordy
             (1, "ApronA", 1, 1, 1, 1, 120, 1),  # Poprawny rekord: apron_id = 1
@@ -730,14 +730,14 @@ test_cases = {
             (1, "ApronJ", 1, 1, 1, 1, -50, 1),  # Błąd: Długość fartucha <= 0
 
             # Rekord z błędem: Zbyt długa nazwa fartucha
-            (1, "ApronTooLongNameThatExceedsThirtyChars", 1, 1, 1, 1, 120, 1),  # Błąd: Nazwa fartucha > 30 znaków
+            (1, "ApronTooLongNameThatExceedsThirtyCharsasdasdasdasdasdasdasdasdas", 1, 1, 1, 1, 120, 1),  # Błąd: Nazwa fartucha > 30 znaków
 
             # Rekord z błędem: Dublowanie nazwy fartucha
             (2, "ApronA", 2, 2, 2, 2, 130, 2)  # Błąd: Nazwa `ApronA` już istnieje dla innego fartucha
         ]
     },
     "update_head_accessory": {
-        "query": "CALL update_head_accessory(%s::INT, %s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL update_head_accessory(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             # Poprawne rekordy
             (4, "HatA", 1, 1, 1, 1, 56, 1),  # Poprawny rekord: head_accessory_id = 4
@@ -776,7 +776,7 @@ test_cases = {
         ]
     },
     "update_caftan": {
-        "query": "CALL update_caftan(%s::INT, %s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL update_caftan(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             # Poprawne rekordy
             (7, "CaftanA", 1, 1, 1, 1, 120, 50, 70, 60, 80),  # Poprawny rekord: caftan_id = 7
@@ -824,7 +824,7 @@ test_cases = {
         ]
     },
     "update_corset": {
-        "query": "CALL update_corset(%s::INT, %s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL update_corset(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             # Poprawne rekordy
             (13, "CorsetA", 1, 1, 1, 1, 70, 40, 60, 50, 80),  # Poprawny rekord: corset_id = 13
@@ -871,7 +871,7 @@ test_cases = {
         ]
     },
     "update_skirt": {
-        "query": "CALL update_skirt(%s::INT, %s::VARCHAR(30), %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
+        "query": "CALL update_skirt(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
             # Poprawne rekordy
             (15, "SkirtA", 1, 1, 1, 1, 70, 40, 60),  # Poprawny rekord: skirt_id = 15
