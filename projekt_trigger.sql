@@ -217,7 +217,7 @@ BEGIN
         FROM Requests
         WHERE id = NEW.due_to_request_id;
         
-        IF NEW.user_id = r_user_id THEN
+        IF NEW.user_id <> r_user_id THEN
             RAISE EXCEPTION 'User id and requester id from request are not the same';
         END IF;
     END IF;
