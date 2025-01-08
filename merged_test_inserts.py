@@ -1,3 +1,5 @@
+import time
+
 import psycopg2
 
 
@@ -7,6 +9,9 @@ def run_tests(connection, query, data):
     with connection.cursor() as cursor:
         for i, record in enumerate(data):
             try:
+                if(query == "CALL return_costume_item(%s::INTEGER,%s::SMALLINT);"):
+                    time.sleep(60)
+
                 cursor.execute(query, record)
                 connection.commit()
                 results.append((i + 1, "RECORD ADDED: "))
@@ -17,7 +22,7 @@ def run_tests(connection, query, data):
 
 # Połączenie z bazą danych
 conn = psycopg2.connect(
-    dbname="postgres",
+    dbname="test9",
     user="postgres",
     password="filip2002",
     host="localhost"
@@ -583,7 +588,7 @@ test_cases = {
             ("Shirt10", 1, 1, 1, 1, 70, 60, 50, 40, 40, 45, 35, 40),  # Błąd: p_shirt_max_waist_circumference < p_shirt_min_waist_circumference
 
             # Rekord z błędem: Max chest circumference < min chest circumference
-            ("Shirt11", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 36, 40),  # Błąd: p_shirt_max_chest_circumference < p_shirt_min_chest_circumference
+            ("Shirt11", 1, 1, 1, 1, 70, 60, 70, 90, 100, 45, 36, 40),  # Błąd: p_shirt_max_chest_circumference < p_shirt_min_chest_circumference
 
             # Rekord z błędem: Max neck circumference < min neck circumference
             ("Shirt12", 1, 1, 1, 1, 70, 60, 70, 90, 40, 45, 30, 29),  # Błąd: p_shirt_max_neck_circumference < p_shirt_min_neck_circumference
@@ -700,6 +705,34 @@ test_cases = {
             ("NeckAccessory1", 2, 1, 1, 1, 30, 40)  # Błąd: Neck accessory o nazwie "NeckAccessory1" już istnieje
         ]
     },
+    "add_costume": {
+        "query": "CALL add_costume(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER);",
+        "data": [
+            ('Costume AA', 1, 1, 1, 5, 7, 9, 11, 13, 15, 17, 19, 21, 3),  # podmienic niektóre id
+
+            # Poprawny przypadek
+            ('Costume A', 2, 2, 2, 6, 8, 10, 11, 14, 16, 18, 20, 22, 4), #podmienic niektóre id
+
+            # Błędne przypadki - różne wyjątki
+            # (None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),           # None jako `p_costume_name`
+            # ('Costume B', None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # None jako `p_collection_id`
+            # ('Costume C', 1, None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # None jako `p_gender_id`
+            # ('Costume D', 1, 134, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),     # Błędny `p_gender_id`
+            # ('Costume E', 999, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # Błędne `p_collection_id`
+            # ('Costume F', 1, 1, None, 1, 1, 1, 1, 1, 1, 1, 1),      # Błędny `p_apron_id`
+            # ('Costume G', 1, 1, 1, None, 1, 1, 1, 1, 1, 1, 1, 1),   # Błędny `p_caftan_id`
+            # ('Costume H', 1, 1, 1, 1, None, 1, 1, 1, 1, 1, 1, 1),   # Błędny `p_petticoat_id`
+            # ('Costume I', 1, 1, 1, 1, 1, None, 1, 1, 1, 1, 1, 1),   # Błędny `p_corset_id`
+            # ('Costume J', 1, 1, 1, 1, 1, 1, None, 1, 1, 1, 1, 1),   # Błędny `p_skirt_id`
+            # ('Costume K', 1, 1, 1, 1, 1, 1, 1, None, 1, 1, 1, 1),   # Błędny `p_belt_id`
+            # ('Costume L', 1, 1, 1, 1, 1, 1, 1, 1, None, 1, 1, 1),   # Błędny `p_shirt_id`
+            # ('Costume M', 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 1, 1),   # Błędny `p_pants_id`
+            # ('Costume N', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 1),   # Błędny `p_boots_id`
+            # ('Costume O', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None),   # Błędny `p_neck_accessory_id`
+        ]
+    },
+
+
     "update_apron": {
         "query": "CALL update_apron(%s::INT, %s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT, %s::SMALLINT);",
         "data": [
@@ -983,32 +1016,6 @@ test_cases = {
         ]
     },
 
-    "add_costume": {
-        "query": "CALL add_costume(%s::VARCHAR, %s::SMALLINT, %s::SMALLINT, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER, %s::INTEGER);",
-        "data": [
-            # Poprawny przypadek
-            ('Costume A', 1, 1, 2, 39, 42, 43, 17, 19, 21, 25, 27, 1, 1), #podmienic niektóre id
-
-            # Błędne przypadki - różne wyjątki
-            # (None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),           # None jako `p_costume_name`
-            # ('Costume B', None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # None jako `p_collection_id`
-            # ('Costume C', 1, None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # None jako `p_gender_id`
-            # ('Costume D', 1, 134, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),     # Błędny `p_gender_id`
-            # ('Costume E', 999, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),   # Błędne `p_collection_id`
-            # ('Costume F', 1, 1, None, 1, 1, 1, 1, 1, 1, 1, 1),      # Błędny `p_apron_id`
-            # ('Costume G', 1, 1, 1, None, 1, 1, 1, 1, 1, 1, 1, 1),   # Błędny `p_caftan_id`
-            # ('Costume H', 1, 1, 1, 1, None, 1, 1, 1, 1, 1, 1, 1),   # Błędny `p_petticoat_id`
-            # ('Costume I', 1, 1, 1, 1, 1, None, 1, 1, 1, 1, 1, 1),   # Błędny `p_corset_id`
-            # ('Costume J', 1, 1, 1, 1, 1, 1, None, 1, 1, 1, 1, 1),   # Błędny `p_skirt_id`
-            # ('Costume K', 1, 1, 1, 1, 1, 1, 1, None, 1, 1, 1, 1),   # Błędny `p_belt_id`
-            # ('Costume L', 1, 1, 1, 1, 1, 1, 1, 1, None, 1, 1, 1),   # Błędny `p_shirt_id`
-            # ('Costume M', 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 1, 1),   # Błędny `p_pants_id`
-            # ('Costume N', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 1),   # Błędny `p_boots_id`
-            # ('Costume O', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None),   # Błędny `p_neck_accessory_id`
-        ]
-    },
-
-
     "add_rental_costume_item_request": {
         "query": "CALL add_rental_costume_item_request(%s::INTEGER, %s::INTEGER);",
         "data": [
@@ -1203,11 +1210,12 @@ test_cases = {
         ]
     },
     "return_costume_item": {
-        "query": "CALL return_costume_item(%s::INTEGER);",
+        "query": "CALL return_costume_item(%s::INTEGER,%s::SMALLINT);",
         "data":[
-            (4,),
-            (None,),
-            (1234,),
+            (1,1),
+            (None,2),
+            (1234,1),
+            (1234, None)
         ]
     },
 
@@ -1340,7 +1348,7 @@ test_cases = {
     },
 
     "update_costume_item_location": {
-        "query": "CALL update_costume_item_location(%s::INTEGER, %s::INTEGER);",
+        "query": "CALL update_costume_item_location(%s::INTEGER, %s::SMALLINT);",
         "data": [
             # Poprawne rekordy
             (1, 1),  # Poprawny rekord: costume_item_id = 1, location_id = 1
@@ -1366,7 +1374,7 @@ test_cases = {
         "query": "CALL delete_request(%s::INTEGER);",
         "data": [
             # Poprawny rekord
-            (8,),  # Poprawny rekord: request_id = 2 (zakładając, że request_id = 2 istnieje i jego stan = 1)
+            (7,),  # Poprawny rekord: request_id = 2 (zakładając, że request_id = 2 istnieje i jego stan = 1)
 
             # Rekord z błędem: request_id = NULL
             (None,),  # Błąd: request_id = NULL
