@@ -39,7 +39,6 @@ ALTER TABLE Regions
     ON UPDATE CASCADE
 ;
 
-
 CREATE TABLE Settlements 
     ( 
      id        SMALLINT GENERATED ALWAYS AS IDENTITY NOT NULL, 
@@ -200,6 +199,9 @@ ALTER TABLE Users
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_users_first_last ON Users (first_name, last_name);
+CREATE INDEX idx_users_phone_number ON Users (phone_number);
+CREATE INDEX idx_users_home_location_id ON Users (home_location_id);
 
 CREATE TABLE Roles 
     ( 
@@ -307,6 +309,8 @@ ALTER TABLE Costumiers
     ON UPDATE CASCADE
 ; 
 
+CREATE INDEX idx_costumiers_role_id ON Costumiers(role_id);
+CREATE INDEX idx_costumiers_work_location_id ON Costumiers(work_location_id);
 
 CREATE TABLE Singers 
     ( 
@@ -344,6 +348,7 @@ ALTER TABLE Singers
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_singers_role_id ON Singers(role_id);
 
 CREATE TABLE Singer_voices 
     ( 
@@ -418,6 +423,7 @@ ALTER TABLE Musicians
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_musicians_role_id ON Musicians(role_id);
 
 CREATE TABLE Musician_instrument 
     ( 
@@ -492,6 +498,7 @@ ALTER TABLE Dancers
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_dancers_role_id ON Dancers(role_id);
 
 CREATE TABLE Dancer_dance 
     ( 
@@ -630,6 +637,10 @@ ALTER TABLE Costumes_items
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_costumes_items_collection_id ON Costumes_items (collection_id);
+CREATE INDEX idx_costumes_items_gender_id ON Costumes_items (gender_id);
+CREATE INDEX idx_costumes_items_color_id ON Costumes_items (color_id);
+CREATE INDEX idx_costumes_items_location_id ON Costumes_items (location_id);
 
 CREATE TABLE Patterns 
     ( 
@@ -700,6 +711,7 @@ ALTER TABLE Head_accessories
     ON UPDATE CASCADE
 ; 
 
+CREATE INDEX Idx_head_accessories_category_id ON Head_accessories(category_id);
 
 CREATE TABLE Aprons 
     ( 
@@ -741,6 +753,7 @@ ALTER TABLE Aprons
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_aprons_pattern_id ON Aprons(pattern_id);
 
 CREATE TABLE Caftans 
     ( 
