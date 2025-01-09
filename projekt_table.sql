@@ -1323,6 +1323,20 @@ ALTER TABLE Costumes
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_costumes_collection_id ON Costumes(collection_id);
+CREATE INDEX idx_costumes_gender_id ON Costumes(gender_id);
+CREATE INDEX idx_costumes_apron_id ON Costumes(apron_id);
+CREATE INDEX idx_costumes_caftan_id ON Costumes(caftan_id);
+CREATE INDEX idx_costumes_petticoat_id ON Costumes(petticoat_id);
+CREATE INDEX idx_costumes_corset_id ON Costumes(corset_id);
+CREATE INDEX idx_costumes_skirt_id ON Costumes(skirt_id);
+CREATE INDEX idx_costumes_belt_id ON Costumes(belt_id);
+CREATE INDEX idx_costumes_shirt_id ON Costumes(shirt_id);
+CREATE INDEX idx_costumes_pants_id ON Costumes(pants_id);
+CREATE INDEX idx_costumes_boots_id ON Costumes(boots_id);
+CREATE INDEX idx_costumes_neck_accessory_id ON Costumes(neck_accessory_id);
+CREATE INDEX idx_costumes_head_accessory_id ON Costumes(head_accessory_id);
+
 
 CREATE TABLE States_of_requests 
     ( 
@@ -1377,6 +1391,9 @@ ALTER TABLE Requests
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_requests_state_id ON Requests (state_id);
+CREATE INDEX idx_requests_requester_user_id ON Requests (requester_user_id);
+CREATE INDEX idx_requests_datetime ON Requests (datetime);
 
 CREATE TABLE Rental_costume_item_requests 
     ( 
@@ -1428,6 +1445,9 @@ ALTER TABLE Rental_costume_item_requests
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_rental_requests_costume_item_id ON Rental_costume_item_requests (costume_item_id);
+CREATE INDEX idx_rental_requests_approver_costumier_id ON Rental_costume_item_requests (approver_costumier_id);
+
 
 CREATE TABLE Return_costume_item_requests 
     ( 
@@ -1478,6 +1498,9 @@ ALTER TABLE Return_costume_item_requests
     ON DELETE CASCADE
     ON UPDATE CASCADE
 ;
+
+CREATE INDEX idx_return_requests_costume_item_id ON Return_costume_item_requests (costume_item_id);
+CREATE INDEX idx_return_requests_approver_costumier_id ON Return_costume_item_requests (approver_costumier_id);
 
 
 CREATE TABLE Borrow_costume_item_requests 
@@ -1531,6 +1554,8 @@ ALTER TABLE Borrow_costume_item_requests
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_borrow_requests_costume_item_id ON Borrow_costume_item_requests (costume_item_id);
+CREATE INDEX idx_borrow_requests_approver_costumier_id ON Borrow_costume_item_requests (approver_user_id);
 
 CREATE TABLE Notifications 
     ( 
@@ -1575,6 +1600,9 @@ ALTER TABLE Notifications
     ON UPDATE CASCADE
 ;
 
+CREATE INDEX idx_notifications_user_id ON Notifications (user_id);
+CREATE INDEX idx_notifications_datetime ON Notifications (datetime);
+CREATE INDEX idx_notifications_due_to_request_id ON Notifications (due_to_request_id);
 
 CREATE TABLE Rentals 
     ( 
@@ -1632,9 +1660,10 @@ ALTER TABLE Rentals
     ON UPDATE CASCADE
 ;
 
-
-
-
-
+CREATE INDEX idx_rentals_user_id ON Rentals (user_id);
+CREATE INDEX idx_rentals_costume_item_id ON Rentals (costume_item_id);
+CREATE INDEX idx_rentals_date_of_rental ON Rentals (date_of_rental);
+CREATE INDEX idx_rentals_date_of_return ON Rentals (date_of_return);
+CREATE INDEX idx_rentals_done_due_request_id ON Rentals (done_due_request_id);
 
 
