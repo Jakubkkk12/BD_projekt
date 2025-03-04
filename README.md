@@ -1,5 +1,11 @@
 # BD_projekt
-Na 5.0
+
+Projekt przedstawia kompletną implementację relacyjnej bazy danych w PostgreSQL, zgodnej z trzecią postacią normalną (3NF). Zawiera on definicję tabel, funkcji, triggerów, widoków, procedur oraz zarządzanie użytkownikami.
+
+Dodatkowo projekt obejmuje:
+✅ Testy napisane w Pythonie
+✅ Dokumentację bazy danych
+✅ Dokumentację testów
 
 Set up:
 1) projekt_table.sql
